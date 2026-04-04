@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import ProjectDetail from "./components/Proyekdetail";
+import ProyekList from "./components/Proyeklist";
 
 /* ─────────────────────────────────────────────
-   GLOBAL STYLES (injected once)
+   GLOBAL STYLES
 ───────────────────────────────────────────── */
 const GlobalStyle = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --red:    #D0292A;
       --black:  #0E0E0E;
@@ -19,16 +20,13 @@ const GlobalStyle = () => (
       --gray-4: #5A5A56;
       --white:  #FFFFFF;
     }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--gray-0);
       font-family: 'DM Sans', sans-serif;
       color: var(--black);
       -webkit-font-smoothing: antialiased;
     }
-
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -41,19 +39,15 @@ const GlobalStyle = () => (
       from { opacity: 0; transform: scale(1.04); }
       to   { opacity: 1; transform: scale(1); }
     }
-
     .anim-slide-up  { animation: slideUp  0.6s cubic-bezier(.22,.68,0,1.2) both; }
     .anim-fade-in   { animation: fadeIn   0.5s ease both; }
     .anim-scale-in  { animation: scaleIn  0.7s cubic-bezier(.22,.68,0,1.1) both; }
-
     .delay-1 { animation-delay: 0.05s; }
     .delay-2 { animation-delay: 0.12s; }
     .delay-3 { animation-delay: 0.20s; }
     .delay-4 { animation-delay: 0.30s; }
-
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
-
     .slide-img {
       transition: opacity 0.55s ease, transform 0.65s cubic-bezier(.22,.68,0,1.1);
     }
@@ -65,6 +59,8 @@ const GlobalStyle = () => (
 ───────────────────────────────────────────── */
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", fn);
@@ -79,46 +75,83 @@ function Navbar() {
         left: 0,
         right: 0,
         zIndex: 100,
-        padding: "0 2.5rem",
+        padding: "0 clamp(1.25rem,4vw,2.5rem)",
         height: "68px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        background: scrolled ? "rgba(244,244,242,0.88)" : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled ? "1px solid var(--gray-2)" : "none",
-        transition: "background 0.4s, border-bottom 0.4s",
+        background: "rgba(10,62,124,0.95)",
+        //background: scrolled ? "rgba(10,62,124,0.95)" : "rgba(10,62,124,0.75)",
+        backdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(255,255,255,0.12)",
+        transition: "background 0.4s",
       }}
     >
       <span
+        onClick={() => navigate("/")}
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "1.35rem",
           fontWeight: 700,
           letterSpacing: "0.04em",
+          color: "#fff",
+          cursor: "pointer",
         }}
       >
         PT STR
       </span>
-      <nav style={{ display: "flex", gap: "2rem" }}>
+
+      <nav
+        style={{
+          display: "flex",
+          gap: "clamp(1rem,2.5vw,2rem)",
+          alignItems: "center",
+        }}
+      >
         {["Beranda", "Tentang", "Proyek", "Kontak"].map((l) => (
-          <a
+          <span
             key={l}
-            href="#"
+            onClick={() => {
+              if (l === "Beranda") navigate("/");
+              if (l === "Proyek") navigate("/proyek");
+            }}
             style={{
-              fontSize: "0.8rem",
+              fontSize: "0.78rem",
               fontWeight: 500,
-              color: "var(--gray-4)",
-              textDecoration: "none",
+              color: "#fff",
               letterSpacing: "0.06em",
+              cursor: "pointer",
               transition: "color 0.2s",
+              textUnderlineOffset: "3px",
             }}
             onMouseEnter={(e) => (e.target.style.color = "var(--black)")}
-            onMouseLeave={(e) => (e.target.style.color = "var(--gray-4)")}
+            onMouseLeave={(e) => (e.target.style.color = "#fff")}
           >
             {l}
-          </a>
+          </span>
         ))}
+        <button
+          style={{
+            background: "rgba(255,255,255,0.15)",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.3)",
+            borderRadius: "999px",
+            padding: "0.45rem 1.2rem",
+            fontSize: "0.75rem",
+            fontWeight: 500,
+            cursor: "pointer",
+            letterSpacing: "0.04em",
+            transition: "background 0.25s",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.background = "rgba(255,255,255,0.25)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.background = "rgba(255,255,255,0.15)")
+          }
+        >
+          Hubungi Kami
+        </button>
       </nav>
     </header>
   );
@@ -154,10 +187,8 @@ function Hero() {
 
   const [current, setCurrent] = useState(0);
   const [animKey, setAnimKey] = useState(0);
-  const [direction, setDirection] = useState(1);
 
   const go = (dir) => {
-    setDirection(dir);
     setCurrent((prev) => (prev + dir + slides.length) % slides.length);
     setAnimKey((k) => k + 1);
   };
@@ -354,7 +385,6 @@ function Hero() {
                   filter: "brightness(0.88)",
                 }}
               />
-
               <div
                 style={{
                   position: "absolute",
@@ -526,7 +556,6 @@ function Highlight() {
   }, []);
 
   const current = highlights[activeIndex];
-
   const handleClick = (index) => {
     setActiveIndex(index);
     setAnimKey((k) => k + 1);
@@ -991,62 +1020,74 @@ function History() {
 /* ─────────────────────────────────────────────
    LIST PROYEK SECTION
 ───────────────────────────────────────────── */
+
+// ✅ Data proyek dengan slug lengkap
 const projects = [
   {
+    slug: "rest-area-betjam-1a",
     image: "/assets/gp1.jpg",
     date: "04 Desember 2024",
     title: "Rest Area Betjam 1A",
     desc: "Pembangunan fasilitas rest area modern dengan konsep hijau dan berkelanjutan di jalur tol Betjam segmen A.",
   },
   {
+    slug: "rest-area-betjam-1b",
     image: "/assets/gp2.jpg",
     date: "04 Desember 2024",
     title: "Rest Area Betjam 1B",
     desc: "Pengembangan kawasan rest area terpadu dengan fasilitas UMKM lokal dan area parkir berkapasitas besar.",
   },
   {
+    slug: "jembatan-layang-suramadu",
     image: "/assets/gp3.jpg",
     date: "15 Januari 2025",
     title: "Jembatan Layang Suramadu",
     desc: "Proyek peningkatan struktur jembatan layang dengan teknologi terkini untuk meningkatkan kapasitas lalu lintas.",
   },
   {
+    slug: "gedung-perkantoran-delta",
     image: "/assets/gp4.jpg",
     date: "22 Februari 2025",
     title: "Gedung Perkantoran Delta",
     desc: "Konstruksi gedung perkantoran 12 lantai dengan desain ramah lingkungan dan sistem energi surya terintegrasi.",
   },
   {
+    slug: "pelabuhan-kalimas-timur",
     image: "/assets/gp5.jpg",
     date: "10 Maret 2025",
     title: "Pelabuhan Kalimas Timur",
     desc: "Revitalisasi fasilitas pelabuhan untuk mendukung peningkatan kapasitas bongkar muat peti kemas nasional.",
   },
   {
+    slug: "rusunawa-benowo",
     image: "/assets/gp6.jpg",
     date: "28 Maret 2025",
     title: "Rusunawa Benowo",
     desc: "Pembangunan rumah susun sederhana sewa bagi masyarakat berpenghasilan rendah dengan fasilitas lengkap.",
   },
   {
+    slug: "drainase-kota-malang",
     image: "/assets/gp7.jpg",
     date: "05 April 2025",
     title: "Sistem Drainase Kota Malang",
     desc: "Peningkatan jaringan drainase perkotaan untuk mengatasi banjir dan genangan air di pusat kota Malang.",
   },
   {
+    slug: "terminal-bus-madura",
     image: "/assets/gp8.jpg",
     date: "18 April 2025",
     title: "Terminal Bus Terpadu Madura",
     desc: "Pembangunan terminal bus modern berkonsep transit hub dengan integrasi moda transportasi umum.",
   },
   {
+    slug: "spam-regional-pasuruan",
     image: "/assets/gp9.jpg",
     date: "02 Mei 2025",
     title: "SPAM Regional Pasuruan",
     desc: "Pengembangan sistem penyediaan air minum regional untuk melayani kebutuhan masyarakat Pasuruan Raya.",
   },
   {
+    slug: "tol-akses-tanjung-perak",
     image: "/assets/gp10.jpg",
     date: "20 Mei 2025",
     title: "Tol Akses Pelabuhan Tanjung Perak",
@@ -1054,12 +1095,18 @@ const projects = [
   },
 ];
 
+// ✅ useNavigate di dalam komponen
 function ProjectCard({ project, index }) {
+  const navigate = useNavigate();
   const isEven = index % 2 === 0;
+
+  const handleNavigate = () => navigate(`/proyek/${project.slug}`);
+
   return (
     <div style={{ flexShrink: 0, width: "clamp(260px, 22vw, 300px)" }}>
       <div
         className="project-card"
+        onClick={handleNavigate}
         style={{
           background: "var(--white)",
           boxShadow: "0 2px 18px rgba(0,0,0,0.07)",
@@ -1111,6 +1158,7 @@ function ProjectCard({ project, index }) {
             }}
           />
         </div>
+
         <div
           style={{
             padding: "0.9rem 1.1rem 0.5rem",
@@ -1130,6 +1178,10 @@ function ProjectCard({ project, index }) {
             {project.date}
           </span>
           <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNavigate();
+            }}
             style={{
               fontSize: "0.68rem",
               fontWeight: 600,
@@ -1147,6 +1199,7 @@ function ProjectCard({ project, index }) {
             See more
           </button>
         </div>
+
         <div style={{ padding: "0.4rem 1.1rem 1.3rem" }}>
           <h4
             style={{
@@ -1180,6 +1233,7 @@ function ProjectCard({ project, index }) {
 }
 
 function Listproyek() {
+  const navigate = useNavigate(); // ✅ di dalam komponen
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -1191,7 +1245,6 @@ function Listproyek() {
     setCanScrollLeft(el.scrollLeft > 4);
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
   };
-
   const scrollLeft = () => {
     scrollRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
     setTimeout(updateScrollState, 380);
@@ -1261,8 +1314,9 @@ function Listproyek() {
                 alignItems: "flex-end",
               }}
             >
-              <a
-                href="#"
+              {/* ✅ Navigasi ke /proyek */}
+              <span
+                onClick={() => navigate("/proyek")}
                 style={{
                   fontSize: "0.78rem",
                   fontWeight: 600,
@@ -1270,12 +1324,13 @@ function Listproyek() {
                   textDecoration: "underline",
                   textUnderlineOffset: "4px",
                   transition: "color 0.2s",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => (e.target.style.color = "var(--red)")}
                 onMouseLeave={(e) => (e.target.style.color = "var(--gray-4)")}
               >
                 Baca Selengkapnya
-              </a>
+              </span>
               <div style={{ display: "flex", gap: "0.5rem" }}>
                 {[
                   { label: "‹", fn: scrollLeft, active: canScrollLeft },
@@ -1393,7 +1448,6 @@ function Footer() {
     "Hubungi Kami",
     "Peta Situs",
   ];
-
   const berita = [
     {
       tag: "Artikel",
@@ -1408,7 +1462,6 @@ function Footer() {
       desc: "Peningkatan struktur jembatan dengan teknologi terkini.",
     },
   ];
-
   const socials = [
     { label: "f", href: "#" },
     { label: "in", href: "#" },
@@ -1417,8 +1470,13 @@ function Footer() {
   ];
 
   return (
-    <footer style={{ background: "var(--black)", color: "#fff", padding: "0" }}>
-      {/* Top notch — menyambung dari section sebelumnya */}
+    <footer
+      style={{
+        background: /*"rgba(10, 62, 124, 0.95)"*/ "var(--black)",
+        color: "#fff",
+        padding: "0",
+      }}
+    >
       <div
         style={{
           background: "var(--gray-0)",
@@ -1426,7 +1484,6 @@ function Footer() {
           height: "2rem",
         }}
       />
-
       <div
         style={{
           maxWidth: "1280px",
@@ -1436,38 +1493,20 @@ function Footer() {
       >
         <style>{`
           .footer-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
+            display: grid; grid-template-columns: 1fr; gap: 2.5rem;
           }
           @media (min-width: 768px) {
-            .footer-grid {
-              grid-template-columns: 1.2fr 1fr 1.1fr;
-              gap: 3rem;
-            }
+            .footer-grid { grid-template-columns: 1.2fr 1fr 1.1fr; gap: 3rem; }
           }
-          .footer-divider {
-            border: none;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin: 2.5rem 0 1.5rem;
-          }
-          .footer-bottom {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            align-items: flex-start;
-          }
+          .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 2.5rem 0 1.5rem; }
+          .footer-bottom { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
           @media (min-width: 768px) {
-            .footer-bottom {
-              flex-direction: row;
-              justify-content: space-between;
-              align-items: center;
-            }
+            .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
           }
         `}</style>
 
         <div className="footer-grid">
-          {/* COL 1 — Brand + alamat + sosial */}
+          {/* COL 1 */}
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
           >
@@ -1486,7 +1525,7 @@ function Footer() {
               <p
                 style={{
                   fontSize: "0.7rem",
-                  color: "rgba(255,255,255,0.4)",
+                  color: "rgba(255,255,255,0.7)",
                   marginTop: "0.15rem",
                   letterSpacing: "0.08em",
                 }}
@@ -1494,11 +1533,10 @@ function Footer() {
                 PT Surya Tripta Rekayasa
               </p>
             </div>
-
             <p
               style={{
                 fontSize: "0.8rem",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.85)",
                 lineHeight: 1.75,
                 maxWidth: "300px",
               }}
@@ -1506,11 +1544,10 @@ function Footer() {
               Kawasan Industri Surabaya, Jl. Rungkut Industri Raya No. 10,
               Surabaya, Jawa Timur 60293, Indonesia.
             </p>
-
             <div
               style={{
                 fontSize: "0.8rem",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.85)",
                 lineHeight: 2,
               }}
             >
@@ -1518,8 +1555,6 @@ function Footer() {
               <div>Fax: (031) 765 4321</div>
               <div>Email: info@ptsurya.co.id</div>
             </div>
-
-            {/* Sosial media */}
             <div style={{ display: "flex", gap: "0.6rem" }}>
               {socials.map(({ label, href }) => (
                 <a
@@ -1558,14 +1593,14 @@ function Footer() {
             </div>
           </div>
 
-          {/* COL 2 — Navigasi */}
+          {/* COL 2 */}
           <div>
             <h4
               style={{
                 fontSize: "0.72rem",
                 fontWeight: 600,
                 letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.35)",
+                color: "rgba(255,255,255,0.85)",
                 textTransform: "uppercase",
                 marginBottom: "1.25rem",
               }}
@@ -1586,7 +1621,7 @@ function Footer() {
                     padding: "0.55rem 0",
                     borderBottom:
                       i < arr.length - 1
-                        ? "1px solid rgba(255,255,255,0.07)"
+                        ? "1px solid rgba(255,255,255,0.1)"
                         : "none",
                   }}
                 >
@@ -1594,7 +1629,7 @@ function Footer() {
                     href="#"
                     style={{
                       fontSize: "0.82rem",
-                      color: "rgba(255,255,255,0.6)",
+                      color: "rgba(255,255,255,0.85)",
                       textDecoration: "none",
                       display: "flex",
                       alignItems: "center",
@@ -1606,7 +1641,7 @@ function Footer() {
                       e.currentTarget.style.paddingLeft = "0.4rem";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+                      e.currentTarget.style.color = "rgba(255,255,255,0.85)";
                       e.currentTarget.style.paddingLeft = "0";
                     }}
                   >
@@ -1618,14 +1653,14 @@ function Footer() {
             </ul>
           </div>
 
-          {/* COL 3 — Berita terkini */}
+          {/* COL 3 */}
           <div>
             <h4
               style={{
                 fontSize: "0.72rem",
                 fontWeight: 600,
                 letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.35)",
+                color: "rgba(255,255,255,0.85)",
                 textTransform: "uppercase",
                 marginBottom: "1.25rem",
               }}
@@ -1663,7 +1698,6 @@ function Footer() {
                     (e.currentTarget.style.background = "transparent")
                   }
                 >
-                  {/* Icon */}
                   <div
                     style={{
                       width: "38px",
@@ -1774,7 +1808,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <hr className="footer-divider" />
         <div className="footer-bottom">
           <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
@@ -1813,14 +1846,25 @@ export default function App() {
   return (
     <>
       <GlobalStyle />
-      <Navbar />
-      <main>
-        <Hero />
-        <Highlight />
-        <History />
-        <Listproyek />
-      </main>
-      <Footer />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar />
+              <main>
+                <Hero />
+                <Highlight />
+                <History />
+                <Listproyek />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+        <Route path="/proyek" element={<ProyekList />} />
+        <Route path="/proyek/:slug" element={<ProjectDetail />} />
+      </Routes>
     </>
   );
 }

@@ -6,9 +6,12 @@ import Navbar from "./components/Navbar.jsx";
 import Highlight from "./components/Highlight.jsx";
 import History from "./components/History.jsx";
 import Listproyek from "./components/Listproyek.jsx";
+import { HashRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <HashRouter>
+      <App />
+    </HashRouter>
   </StrictMode>,
 );
