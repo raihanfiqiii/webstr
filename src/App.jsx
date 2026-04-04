@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import ProjectDetail from "./components/Proyekdetail";
 import ProyekList from "./components/Proyeklist";
+import Profile from "./components/Profile";
 
 /* ─────────────────────────────────────────────
    GLOBAL STYLES
@@ -108,11 +109,12 @@ function Navbar() {
           alignItems: "center",
         }}
       >
-        {["Beranda", "Tentang", "Proyek", "Kontak"].map((l) => (
+        {["Beranda", "Profile", "Proyek", "Tentang"].map((l) => (
           <span
             key={l}
             onClick={() => {
               if (l === "Beranda") navigate("/");
+              if (l === "Profile") navigate("/profile");
               if (l === "Proyek") navigate("/proyek");
             }}
             style={{
@@ -123,6 +125,7 @@ function Navbar() {
               cursor: "pointer",
               transition: "color 0.2s",
               textUnderlineOffset: "3px",
+              textDecoration: l === "Beranda" ? "underline" : "none",
             }}
             onMouseEnter={(e) => (e.target.style.color = "var(--black)")}
             onMouseLeave={(e) => (e.target.style.color = "#fff")}
@@ -1864,6 +1867,7 @@ export default function App() {
         />
         <Route path="/proyek" element={<ProyekList />} />
         <Route path="/proyek/:slug" element={<ProjectDetail />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );

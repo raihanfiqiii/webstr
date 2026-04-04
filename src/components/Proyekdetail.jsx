@@ -276,7 +276,7 @@ const allProjects = [
 ];
 
 /* ─────────────────────────────────────────────
-   NAVBAR  ✅ warna diperbaiki, logo navigable
+   NAVBAR
 ───────────────────────────────────────────── */
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -301,14 +301,12 @@ function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        // ✅ Tidak transparan di atas hero biru — pakai semi-opaque agar teks tetap terbaca
         background: scrolled ? "rgba(10,62,124,0.95)" : "rgba(10,62,124,0.75)",
         backdropFilter: "blur(16px)",
         borderBottom: "1px solid rgba(255,255,255,0.12)",
         transition: "background 0.4s",
       }}
     >
-      {/* ✅ Logo navigable ke home */}
       <span
         onClick={() => navigate("/")}
         style={{
@@ -316,7 +314,7 @@ function Navbar() {
           fontSize: "1.35rem",
           fontWeight: 700,
           letterSpacing: "0.04em",
-          color: "#fff", // ✅ putih karena background biru
+          color: "#fff",
           cursor: "pointer",
         }}
       >
@@ -341,7 +339,6 @@ function Navbar() {
             style={{
               fontSize: "0.78rem",
               fontWeight: 500,
-              // ✅ warna putih karena header di atas background biru
               color: l === "Proyek" ? "#fff" : "rgba(255,255,255,0.7)",
               letterSpacing: "0.06em",
               cursor: "pointer",
@@ -386,111 +383,405 @@ function Navbar() {
 }
 
 /* ─────────────────────────────────────────────
-   FOOTER
+   FOOTER SECTION
 ───────────────────────────────────────────── */
 function Footer() {
+  const navLinks = [
+    "PT STR untuk Indonesia",
+    "Sejarah PT STR",
+    "PT Surya Tripta Rekayasa",
+    "Laporan",
+    "Berita dan Agenda",
+    "Hubungi Kami",
+    "Peta Situs",
+  ];
+  const berita = [
+    {
+      tag: "Artikel",
+      date: "04-12-2024",
+      title: "Rest Area Betjam 1A Resmi Beroperasi",
+      desc: "Fasilitas rest area modern dengan konsep hijau dan berkelanjutan.",
+    },
+    {
+      tag: "Proyek",
+      date: "15-01-2025",
+      title: "Jembatan Layang Suramadu Tahap II",
+      desc: "Peningkatan struktur jembatan dengan teknologi terkini.",
+    },
+  ];
+  const socials = [
+    { label: "f", href: "#" },
+    { label: "in", href: "#" },
+    { label: "ig", href: "#" },
+    { label: "yt", href: "#" },
+  ];
+
   return (
     <footer
       style={{
-        background: "var(--black)",
-        color: "rgba(255,255,255,0.55)",
-        padding: "3rem clamp(1.25rem,4vw,2.5rem) 2rem",
+        background: /*"rgba(10, 62, 124, 0.95)"*/ "var(--black)",
+        color: "#fff",
+        padding: "0",
       }}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: "2rem",
-            paddingBottom: "2.5rem",
-            borderBottom: "1px solid rgba(255,255,255,0.1)",
-          }}
-        >
-          <div>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "1.5rem",
-                fontWeight: 700,
-                color: "#fff",
-                marginBottom: "0.75rem",
-              }}
-            >
-              PT STR
-            </p>
-            <p
-              style={{
-                fontSize: "0.78rem",
-                lineHeight: 1.75,
-                maxWidth: "220px",
-              }}
-            >
-              PT Surya Tripta Rekayasa — membangun Indonesia dengan kualitas dan
-              integritas.
-            </p>
-          </div>
-          {[
-            {
-              title: "Layanan",
-              items: [
-                "Konstruksi",
-                "Desain Arsitektur",
-                "Konsultasi Teknis",
-                "Manajemen Proyek",
-              ],
-            },
-            {
-              title: "Perusahaan",
-              items: ["Tentang Kami", "Sejarah", "Tim Kami", "Karir"],
-            },
-            {
-              title: "Kontak",
-              items: [
-                "Surabaya, Jawa Timur",
-                "+62 31 xxx xxxx",
-                "info@ptstr.co.id",
-              ],
-            },
-          ].map((col) => (
-            <div key={col.title}>
-              <p
+      <div
+        style={{
+          //background: "var(--gray-0)",
+          background: "linear-gradient(var(--blue) 100%, var(--blue-dk) 0%)",
+          borderRadius: "0 0 2rem 2rem",
+          height: "2rem",
+        }}
+      />
+      <div
+        style={{
+          maxWidth: "1280px",
+          margin: "0 auto",
+          padding: "3rem 2rem 2rem",
+        }}
+      >
+        <style>{`
+          .footer-grid {
+            display: grid; grid-template-columns: 1fr; gap: 2.5rem;
+          }
+          @media (min-width: 768px) {
+            .footer-grid { grid-template-columns: 1.2fr 1fr 1.1fr; gap: 3rem; }
+          }
+          .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 2.5rem 0 1.5rem; }
+          .footer-bottom { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+          @media (min-width: 768px) {
+            .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
+          }
+        `}</style>
+
+        <div className="footer-grid">
+          {/* COL 1 */}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+          >
+            <div>
+              <span
                 style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "1.6rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
                   color: "#fff",
-                  fontWeight: 600,
-                  fontSize: "0.78rem",
-                  marginBottom: "0.9rem",
-                  letterSpacing: "0.06em",
                 }}
               >
-                {col.title.toUpperCase()}
+                PT STR
+              </span>
+              <p
+                style={{
+                  fontSize: "0.7rem",
+                  color: "rgba(255,255,255,0.7)",
+                  marginTop: "0.15rem",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                PT Surya Tripta Rekayasa
               </p>
-              {col.items.map((item) => (
-                <p
-                  key={item}
+            </div>
+            <p
+              style={{
+                fontSize: "0.8rem",
+                color: "rgba(255,255,255,0.85)",
+                lineHeight: 1.75,
+                maxWidth: "300px",
+              }}
+            >
+              Kawasan Industri Surabaya, Jl. Rungkut Industri Raya No. 10,
+              Surabaya, Jawa Timur 60293, Indonesia.
+            </p>
+            <div
+              style={{
+                fontSize: "0.8rem",
+                color: "rgba(255,255,255,0.85)",
+                lineHeight: 2,
+              }}
+            >
+              <div>Phone: (031) 123 4567</div>
+              <div>Fax: (031) 765 4321</div>
+              <div>Email: info@ptsurya.co.id</div>
+            </div>
+            <div style={{ display: "flex", gap: "0.6rem" }}>
+              {socials.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
                   style={{
-                    fontSize: "0.78rem",
-                    marginBottom: "0.5rem",
-                    lineHeight: 1.6,
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    border: "1.5px solid rgba(255,255,255,0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.68rem",
+                    fontWeight: 600,
+                    color: "rgba(255,255,255,0.6)",
+                    textDecoration: "none",
+                    textTransform: "uppercase",
+                    transition:
+                      "border-color 0.2s, color 0.2s, background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--red)";
+                    e.currentTarget.style.color = "#fff";
+                    e.currentTarget.style.background = "var(--red)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                    e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+                    e.currentTarget.style.background = "transparent";
                   }}
                 >
-                  {item}
-                </p>
+                  {label}
+                </a>
               ))}
             </div>
-          ))}
+          </div>
+
+          {/* COL 2 */}
+          <div>
+            <h4
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                color: "rgba(255,255,255,0.85)",
+                textTransform: "uppercase",
+                marginBottom: "1.25rem",
+              }}
+            >
+              Navigasi
+            </h4>
+            <ul
+              style={{
+                listStyle: "none",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {navLinks.map((item, i, arr) => (
+                <li
+                  key={item}
+                  style={{
+                    padding: "0.55rem 0",
+                    borderBottom:
+                      i < arr.length - 1
+                        ? "1px solid rgba(255,255,255,0.1)"
+                        : "none",
+                  }}
+                >
+                  <a
+                    href="#"
+                    style={{
+                      fontSize: "0.82rem",
+                      color: "rgba(255,255,255,0.85)",
+                      textDecoration: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      transition: "color 0.2s, padding-left 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "#fff";
+                      e.currentTarget.style.paddingLeft = "0.4rem";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "rgba(255,255,255,0.85)";
+                      e.currentTarget.style.paddingLeft = "0";
+                    }}
+                  >
+                    <span style={{ fontSize: "0.4rem", opacity: 0.4 }}>●</span>
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* COL 3 */}
+          <div>
+            <h4
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                color: "rgba(255,255,255,0.85)",
+                textTransform: "uppercase",
+                marginBottom: "1.25rem",
+              }}
+            >
+              Berita Terkini
+            </h4>
+            <div
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                borderRadius: "1.25rem",
+                border: "1px solid rgba(255,255,255,0.08)",
+                overflow: "hidden",
+              }}
+            >
+              {berita.map((item, i, arr) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: "1rem 1.25rem",
+                    borderBottom:
+                      i < arr.length - 1
+                        ? "1px solid rgba(255,255,255,0.07)"
+                        : "none",
+                    display: "flex",
+                    gap: "0.9rem",
+                    alignItems: "flex-start",
+                    cursor: "pointer",
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background =
+                      "rgba(255,255,255,0.06)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "transparent")
+                  }
+                >
+                  <div
+                    style={{
+                      width: "38px",
+                      height: "38px",
+                      flexShrink: 0,
+                      borderRadius: "10px",
+                      background: "rgba(208,41,42,0.18)",
+                      border: "1px solid rgba(208,41,42,0.3)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "14px",
+                        height: "14px",
+                        borderRadius: "3px",
+                        background: "var(--red)",
+                        opacity: 0.9,
+                      }}
+                    />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "0.5rem",
+                        alignItems: "center",
+                        marginBottom: "0.3rem",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.62rem",
+                          fontWeight: 600,
+                          color: "var(--red)",
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {item.tag}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "0.62rem",
+                          color: "rgba(255,255,255,0.3)",
+                        }}
+                      >
+                        {item.date}
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "0.8rem",
+                        fontWeight: 600,
+                        color: "#fff",
+                        lineHeight: 1.35,
+                        marginBottom: "0.25rem",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {item.title}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "0.72rem",
+                        color: "rgba(255,255,255,0.4)",
+                        lineHeight: 1.55,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <div
+                style={{
+                  padding: "0.75rem 1.25rem",
+                  borderTop: "1px solid rgba(255,255,255,0.07)",
+                }}
+              >
+                <a
+                  href="#"
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    color: "var(--red)",
+                    textDecoration: "none",
+                    letterSpacing: "0.04em",
+                    transition: "opacity 0.2s",
+                  }}
+                  onMouseEnter={(e) => (e.target.style.opacity = "0.75")}
+                  onMouseLeave={(e) => (e.target.style.opacity = "1")}
+                >
+                  Lihat semua berita →
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <p
-          style={{
-            marginTop: "1.5rem",
-            fontSize: "0.72rem",
-            textAlign: "center",
-            letterSpacing: "0.04em",
-          }}
-        >
-          © {new Date().getFullYear()} PT Surya Tripta Rekayasa. All rights
-          reserved.
-        </p>
+
+        <hr className="footer-divider" />
+        <div className="footer-bottom">
+          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
+            © 2025 PT Surya Tripta Rekayasa. All Rights Reserved.
+          </p>
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            {["Kebijakan Privasi", "Syarat & Ketentuan"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                style={{
+                  fontSize: "0.75rem",
+                  color: "rgba(255,255,255,0.3)",
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => (e.target.style.color = "#fff")}
+                onMouseLeave={(e) =>
+                  (e.target.style.color = "rgba(255,255,255,0.3)")
+                }
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   );
