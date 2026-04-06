@@ -2,75 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 /* ─────────────────────────────────────────────
-   GLOBAL STYLES
-───────────────────────────────────────────── */
-const GlobalStyle = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --red:     #D0292A;
-      --blue:    #1156A8;
-      --blue-dk: #0A3E7C;
-      --blue-lt: #1A6EC8;
-      --black:   #0E0E0E;
-      --gray-0:  #F4F4F2;
-      --gray-1:  #E8E8E5;
-      --gray-2:  #D2D2CE;
-      --gray-3:  #9A9A96;
-      --gray-4:  #5A5A56;
-      --white:   #FFFFFF;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--gray-0);
-      font-family: 'DM Sans', sans-serif;
-      color: var(--black);
-      -webkit-font-smoothing: antialiased;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    @keyframes scaleIn {
-      from { opacity: 0; transform: scale(1.05); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.45; transform: scale(0.7); }
-    }
-    .anim-slide-up { animation: slideUp  0.65s cubic-bezier(.22,.68,0,1.2) both; }
-    .anim-fade-in  { animation: fadeIn   0.5s ease both; }
-    .anim-scale-in { animation: scaleIn  0.7s cubic-bezier(.22,.68,0,1.1) both; }
-    .d1 { animation-delay: 0.05s; }
-    .d2 { animation-delay: 0.15s; }
-    .d3 { animation-delay: 0.26s; }
-    .d4 { animation-delay: 0.38s; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
-    .data-row:hover { background: rgba(17,86,168,0.04) !important; }
-    .rel-card { transition: transform 0.38s cubic-bezier(.22,.68,0,1.2), box-shadow 0.35s; }
-    .rel-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 20px 48px rgba(0,0,0,0.22); }
-
-    /* Responsive */
-    @media (max-width: 767px) {
-      .related-grid   { grid-template-columns: 1fr !important; gap: 1.2rem !important; }
-      .hero-title-row { flex-direction: column !important; gap: 1rem !important; }
-      .pd-nav-desktop { display: none !important; }
-    }
-    @media (min-width: 480px) and (max-width: 767px) {
-      .related-grid { grid-template-columns: repeat(2, 1fr) !important; }
-    }
-  `}</style>
-);
-
-/* ─────────────────────────────────────────────
-   ALL PROJECTS DATA — 10 proyek
+   ALL PROJECTS DATA
 ───────────────────────────────────────────── */
 const allProjects = [
   {
@@ -276,114 +208,509 @@ const allProjects = [
 ];
 
 /* ─────────────────────────────────────────────
-   NAVBAR
+   NAVBAR — identik dengan App.jsx
 ───────────────────────────────────────────── */
+// function Navbar() {
+//   const [scrolled, setScrolled] = useState(false);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fn = () => setScrolled(window.scrollY > 24);
+//     window.addEventListener("scroll", fn, { passive: true });
+//     return () => window.removeEventListener("scroll", fn);
+//   }, []);
+
+//   return (
+//     <header
+//       style={{
+//         position: "fixed",
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         zIndex: 200,
+//         height: "68px",
+//         display: "flex",
+//         alignItems: "center",
+//         padding: "0 clamp(1.25rem,4vw,2.5rem)",
+//         justifyContent: "space-between",
+//         background: scrolled ? "rgba(8,12,18,0.92)" : "rgba(10,62,124,0.95)",
+//         backdropFilter: "blur(20px)",
+//         borderBottom: scrolled
+//           ? "1px solid rgba(255,255,255,0.08)"
+//           : "1px solid rgba(255,255,255,0.12)",
+//         transition: "background 0.45s, border-bottom 0.45s",
+//       }}
+//     >
+//       <div
+//         onClick={() => navigate("/")}
+//         style={{
+//           display: "flex",
+//           alignItems: "baseline",
+//           gap: "0.6rem",
+//           cursor: "pointer",
+//         }}
+//       >
+//         <span
+//           style={{
+//             fontFamily: "'Cormorant Garamond', serif",
+//             fontSize: "1.5rem",
+//             fontWeight: 700,
+//             letterSpacing: "0.05em",
+//             color: "#fff",
+//             lineHeight: 1,
+//           }}
+//         >
+//           PT STR
+//         </span>
+//         <span
+//           style={{
+//             fontSize: "0.58rem",
+//             fontWeight: 500,
+//             letterSpacing: "0.14em",
+//             textTransform: "uppercase",
+//             color: "rgba(255,255,255,0.45)",
+//             paddingBottom: "2px",
+//           }}
+//           className="pd-hide-mobile"
+//         >
+//           Surya Tripta Rekayasa
+//         </span>
+//       </div>
+
+//       <nav
+//         className="pd-nav-items"
+//         style={{
+//           display: "flex",
+//           gap: "clamp(1.25rem,2.5vw,2.25rem)",
+//           alignItems: "center",
+//         }}
+//       >
+//         {[
+//           { label: "Beranda", path: "/" },
+//           { label: "Profile", path: "/profile" },
+//           { label: "Proyek", path: "/proyek" },
+//           { label: "Tentang", path: null },
+//         ].map(({ label, path }) => (
+//           <span
+//             key={label}
+//             onClick={() => path && navigate(path)}
+//             style={{
+//               fontSize: "0.75rem",
+//               fontWeight: 500,
+//               letterSpacing: "0.07em",
+//               textTransform: "uppercase",
+//               color: label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)",
+//               cursor: path ? "pointer" : "default",
+//               transition: "color 0.2s",
+//               borderBottom:
+//                 label === "Proyek"
+//                   ? "1.5px solid rgba(255,255,255,0.5)"
+//                   : "none",
+//               paddingBottom: "2px",
+//             }}
+//             onMouseEnter={(e) => {
+//               if (path) e.currentTarget.style.color = "#fff";
+//             }}
+//             onMouseLeave={(e) => {
+//               e.currentTarget.style.color =
+//                 label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)";
+//             }}
+//           >
+//             {label}
+//           </span>
+//         ))}
+//         <button
+//           style={{
+//             background: "var(--red)",
+//             color: "#fff",
+//             border: "none",
+//             borderRadius: "3px",
+//             padding: "0.48rem 1.25rem",
+//             fontSize: "0.72rem",
+//             fontWeight: 600,
+//             letterSpacing: "0.08em",
+//             textTransform: "uppercase",
+//             cursor: "pointer",
+//             transition: "background 0.22s, transform 0.18s",
+//           }}
+//           onMouseEnter={(e) => {
+//             e.currentTarget.style.background = "#a01c17";
+//             e.currentTarget.style.transform = "translateY(-1px)";
+//           }}
+//           onMouseLeave={(e) => {
+//             e.currentTarget.style.background = "var(--red)";
+//             e.currentTarget.style.transform = "none";
+//           }}
+//         >
+//           Hubungi Kami
+//         </button>
+//       </nav>
+//     </header>
+//   );
+// }
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", fn);
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        padding: "0 clamp(1.25rem,4vw,2.5rem)",
-        height: "68px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: scrolled ? "rgba(10,62,124,0.95)" : "rgba(10,62,124,0.75)",
-        backdropFilter: "blur(16px)",
-        borderBottom: "1px solid rgba(255,255,255,0.12)",
-        transition: "background 0.4s",
-      }}
-    >
-      <span
-        onClick={() => navigate("/")}
-        style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "1.35rem",
-          fontWeight: 700,
-          letterSpacing: "0.04em",
-          color: "#fff",
-          cursor: "pointer",
-        }}
-      >
-        PT STR
-      </span>
+  // Tutup menu saat scroll
+  useEffect(() => {
+    if (!menuOpen) return;
+    const fn = () => setMenuOpen(false);
+    window.addEventListener("scroll", fn, { passive: true, once: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, [menuOpen]);
 
-      <nav
-        className="pd-nav-desktop"
+  const navItems = [
+    { label: "Beranda", path: "/" },
+    { label: "Profile", path: "/profile" },
+    { label: "Proyek", path: "/proyek" },
+  ];
+
+  const handleNav = (path) => {
+    navigate(path);
+    setMenuOpen(false);
+  };
+
+  return (
+    <>
+      <header
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 200,
+          height: "68px",
           display: "flex",
-          gap: "clamp(1rem,2.5vw,2rem)",
           alignItems: "center",
+          padding: "0 clamp(1.25rem,4vw,2.5rem)",
+          justifyContent: "space-between",
+          background: scrolled ? "rgba(8,12,18,0.92)" : "rgba(10,62,124,0.95)",
+          backdropFilter: "blur(20px)",
+          borderBottom: scrolled
+            ? "1px solid rgba(255,255,255,0.08)"
+            : "1px solid rgba(255,255,255,0.12)",
+          transition: "background 0.45s, border-bottom 0.45s",
         }}
       >
-        {["Beranda", "Tentang", "Proyek", "Kontak"].map((l) => (
-          <span
-            key={l}
-            onClick={() => {
-              if (l === "Beranda") navigate("/");
-              if (l === "Proyek") navigate("/proyek"); // ✅ navigasi ke list proyek
-            }}
-            style={{
-              fontSize: "0.78rem",
-              fontWeight: 500,
-              color: l === "Proyek" ? "#fff" : "rgba(255,255,255,0.7)",
-              letterSpacing: "0.06em",
-              cursor: "pointer",
-              transition: "color 0.2s",
-              textDecoration: l === "Proyek" ? "underline" : "none",
-              textUnderlineOffset: "3px",
-            }}
-            onMouseEnter={(e) => (e.target.style.color = "#fff")}
-            onMouseLeave={(e) =>
-              (e.target.style.color =
-                l === "Proyek" ? "#fff" : "rgba(255,255,255,0.7)")
-            }
-          >
-            {l}
-          </span>
-        ))}
-        <button
+        {/* Logo */}
+        <div
+          onClick={() => handleNav("/")}
           style={{
-            background: "rgba(255,255,255,0.15)",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.3)",
-            borderRadius: "999px",
-            padding: "0.45rem 1.2rem",
-            fontSize: "0.75rem",
-            fontWeight: 500,
+            display: "flex",
+            alignItems: "baseline",
+            gap: "0.6rem",
             cursor: "pointer",
-            letterSpacing: "0.04em",
-            transition: "background 0.25s",
           }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "rgba(255,255,255,0.25)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "rgba(255,255,255,0.15)")
-          }
         >
-          Hubungi Kami
+          <span
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "1.5rem",
+              fontWeight: 700,
+              letterSpacing: "0.05em",
+              color: "#fff",
+              lineHeight: 1,
+            }}
+          >
+            PT STR
+          </span>
+          <span
+            style={{
+              fontSize: "0.58rem",
+              fontWeight: 500,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.45)",
+              paddingBottom: "2px",
+            }}
+            className="hide-mobile"
+          >
+            Surya Tripta Rekayasa
+          </span>
+        </div>
+
+        {/* Nav items — desktop */}
+        <nav
+          className="nav-items"
+          style={{
+            display: "flex",
+            gap: "clamp(1.25rem,2.5vw,2.25rem)",
+            alignItems: "center",
+          }}
+        >
+          {navItems.map(({ label, path }) => (
+            <span
+              key={label}
+              onClick={() => handleNav(path)}
+              style={{
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                letterSpacing: "0.07em",
+                textTransform: "uppercase",
+                color: label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)",
+                cursor: "pointer",
+                transition: "color 0.2s",
+                paddingBottom: "2px",
+                borderBottom:
+                  label === "Proyek"
+                    ? "1.5px solid rgba(255,255,255,0.5)"
+                    : "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#fff";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color =
+                  label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)";
+              }}
+            >
+              {label}
+            </span>
+          ))}
+          <button
+            style={{
+              background: "var(--red)",
+              color: "#fff",
+              border: "none",
+              borderRadius: "3px",
+              padding: "0.48rem 1.25rem",
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "background 0.22s, transform 0.18s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#a01c17";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--red)";
+              e.currentTarget.style.transform = "none";
+            }}
+          >
+            Hubungi Kami
+          </button>
+        </nav>
+
+        {/* Hamburger button — mobile only */}
+        <button
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label="Toggle menu"
+          style={{
+            display: "none",
+            flexDirection: "column",
+            gap: "5px",
+            cursor: "pointer",
+            background: "none",
+            border: "none",
+            padding: "8px",
+            borderRadius: "4px",
+            transition: "background 0.2s",
+          }}
+          className="hamburger-btn"
+        >
+          <span
+            style={{
+              display: "block",
+              width: "22px",
+              height: "1.5px",
+              background: "#fff",
+              borderRadius: "2px",
+              transition: "all 0.38s cubic-bezier(.22,.68,0,1.2)",
+              transformOrigin: "center",
+              transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
+            }}
+          />
+          <span
+            style={{
+              display: "block",
+              width: "22px",
+              height: "1.5px",
+              background: "#fff",
+              borderRadius: "2px",
+              transition: "all 0.38s cubic-bezier(.22,.68,0,1.2)",
+              opacity: menuOpen ? 0 : 1,
+              transform: menuOpen ? "scaleX(0)" : "scaleX(1)",
+            }}
+          />
+          <span
+            style={{
+              display: "block",
+              width: "22px",
+              height: "1.5px",
+              background: "#fff",
+              borderRadius: "2px",
+              transition: "all 0.38s cubic-bezier(.22,.68,0,1.2)",
+              transformOrigin: "center",
+              transform: menuOpen
+                ? "translateY(-6.5px) rotate(-45deg)"
+                : "none",
+            }}
+          />
         </button>
-      </nav>
-    </header>
+      </header>
+
+      {/* Mobile menu overlay */}
+      <div
+        style={{
+          position: "fixed",
+          top: "68px",
+          left: 0,
+          right: 0,
+          zIndex: 199,
+          background: "rgba(8,12,18,0.97)",
+          backdropFilter: "blur(24px)",
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          transformOrigin: "top",
+          transform: menuOpen ? "scaleY(1)" : "scaleY(0)",
+          opacity: menuOpen ? 1 : 0,
+          transition:
+            "transform 0.42s cubic-bezier(.22,.68,0,1.15), opacity 0.32s ease",
+          pointerEvents: menuOpen ? "auto" : "none",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ padding: "1.5rem 2rem 2rem" }}>
+          {navItems.map(({ label, path }, i) => (
+            <div
+              key={label}
+              onClick={() => handleNav(path)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "1.1rem 0",
+                borderBottom:
+                  i < navItems.length - 1
+                    ? "1px solid rgba(255,255,255,0.06)"
+                    : "none",
+                cursor: "pointer",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.7";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.9rem" }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.55rem",
+                    color: "rgba(255,255,255,0.22)",
+                    letterSpacing: "0.1em",
+                    fontWeight: 500,
+                    width: "18px",
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "1rem",
+                    fontWeight: 500,
+                    color: "rgba(255,255,255,0.88)",
+                    letterSpacing: "0.04em",
+                    transition: "color 0.2s",
+                  }}
+                >
+                  {label}
+                </span>
+              </div>
+              <span
+                style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.2)" }}
+              >
+                →
+              </span>
+            </div>
+          ))}
+
+          {/* Footer dalam menu */}
+          <div
+            style={{
+              marginTop: "1.75rem",
+              paddingTop: "1.5rem",
+              borderTop: "1px solid rgba(255,255,255,0.07)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontStyle: "italic",
+                  fontSize: "0.78rem",
+                  color: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                PT Surya Tripta Rekayasa
+              </p>
+              <p
+                style={{
+                  fontSize: "0.58rem",
+                  color: "rgba(255,255,255,0.15)",
+                  marginTop: "0.2rem",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Surabaya, Jawa Timur
+              </p>
+            </div>
+            <button
+              style={{
+                background: "var(--red)",
+                color: "#fff",
+                border: "none",
+                borderRadius: "4px",
+                padding: "0.72rem 1.75rem",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                transition: "background 0.22s",
+                flex: 1,
+                maxWidth: "200px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#a01c17";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "var(--red)";
+              }}
+            >
+              Hubungi Kami
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
 /* ─────────────────────────────────────────────
-   FOOTER SECTION
+   FOOTER — identik dengan App.jsx
 ───────────────────────────────────────────── */
 function Footer() {
   const navLinks = [
@@ -417,17 +744,10 @@ function Footer() {
   ];
 
   return (
-    <footer
-      style={{
-        background: /*"rgba(10, 62, 124, 0.95)"*/ "var(--black)",
-        color: "#fff",
-        padding: "0",
-      }}
-    >
+    <footer style={{ background: "var(--black)", color: "#fff", padding: "0" }}>
       <div
         style={{
-          //background: "var(--gray-0)",
-          background: "linear-gradient(var(--blue) 100%, var(--blue-dk) 0%)",
+          background: "var(--gray-0)",
           borderRadius: "0 0 2rem 2rem",
           height: "2rem",
         }}
@@ -436,345 +756,338 @@ function Footer() {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "3rem 2rem 2rem",
+          padding: "4rem 2rem 2.5rem",
         }}
       >
         <style>{`
-          .footer-grid {
-            display: grid; grid-template-columns: 1fr; gap: 2.5rem;
-          }
-          @media (min-width: 768px) {
-            .footer-grid { grid-template-columns: 1.2fr 1fr 1.1fr; gap: 3rem; }
-          }
-          .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 2.5rem 0 1.5rem; }
-          .footer-bottom { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
-          @media (min-width: 768px) {
-            .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
-          }
+          .pd-footer-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+          @media (min-width: 768px) { .pd-footer-grid { grid-template-columns: 1.4fr 1fr 1.2fr; gap: 3.5rem; } }
+          .pd-footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 2.5rem 0 1.75rem; }
+          .pd-footer-bottom { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+          @media (min-width: 768px) { .pd-footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
         `}</style>
 
-        <div className="footer-grid">
+        {/* Brand strip */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "3rem",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            marginBottom: "3rem",
+            flexWrap: "wrap",
+            gap: "1.5rem",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "2rem",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                color: "#fff",
+                display: "block",
+              }}
+            >
+              PT STR
+            </span>
+            <p
+              style={{
+                fontSize: "0.65rem",
+                color: "rgba(255,255,255,0.35)",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Surya Tripta Rekayasa
+            </p>
+          </div>
+          <p
+            style={{
+              fontSize: "0.82rem",
+              color: "rgba(255,255,255,0.45)",
+              maxWidth: "380px",
+              lineHeight: 1.75,
+              fontStyle: "italic",
+            }}
+          >
+            "Membangun Indonesia dengan kualitas, presisi, dan integritas yang
+            tidak pernah berkompromi."
+          </p>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            {socials.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "3px",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  color: "rgba(255,255,255,0.5)",
+                  textDecoration: "none",
+                  textTransform: "uppercase",
+                  transition: "border-color 0.2s, color 0.2s, background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--blue-lt)";
+                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.background = "var(--blue)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="pd-footer-grid">
           {/* COL 1 */}
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
           >
             <div>
-              <span
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "1.6rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                  color: "#fff",
-                }}
-              >
-                PT STR
-              </span>
               <p
                 style={{
-                  fontSize: "0.7rem",
-                  color: "rgba(255,255,255,0.7)",
-                  marginTop: "0.15rem",
-                  letterSpacing: "0.08em",
+                  fontSize: "0.62rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.3)",
+                  marginBottom: "0.75rem",
                 }}
               >
-                PT Surya Tripta Rekayasa
+                Kantor Pusat
+              </p>
+              <p
+                style={{
+                  fontSize: "0.8rem",
+                  color: "rgba(255,255,255,0.65)",
+                  lineHeight: 1.85,
+                }}
+              >
+                Kawasan Industri Surabaya
+                <br />
+                Jl. Rungkut Industri Raya No. 10
+                <br />
+                Surabaya, Jawa Timur 60293
               </p>
             </div>
-            <p
-              style={{
-                fontSize: "0.8rem",
-                color: "rgba(255,255,255,0.85)",
-                lineHeight: 1.75,
-                maxWidth: "300px",
-              }}
-            >
-              Kawasan Industri Surabaya, Jl. Rungkut Industri Raya No. 10,
-              Surabaya, Jawa Timur 60293, Indonesia.
-            </p>
             <div
               style={{
-                fontSize: "0.8rem",
-                color: "rgba(255,255,255,0.85)",
-                lineHeight: 2,
+                fontSize: "0.78rem",
+                color: "rgba(255,255,255,0.55)",
+                lineHeight: 2.2,
               }}
             >
-              <div>Phone: (031) 123 4567</div>
-              <div>Fax: (031) 765 4321</div>
-              <div>Email: info@ptsurya.co.id</div>
-            </div>
-            <div style={{ display: "flex", gap: "0.6rem" }}>
-              {socials.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    border: "1.5px solid rgba(255,255,255,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "0.68rem",
-                    fontWeight: 600,
-                    color: "rgba(255,255,255,0.6)",
-                    textDecoration: "none",
-                    textTransform: "uppercase",
-                    transition:
-                      "border-color 0.2s, color 0.2s, background 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "var(--red)";
-                    e.currentTarget.style.color = "#fff";
-                    e.currentTarget.style.background = "var(--red)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-                    e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  {label}
-                </a>
+              {[
+                ["T", "(031) 123 4567"],
+                ["F", "(031) 765 4321"],
+                ["E", "info@ptsurya.co.id"],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display: "flex", gap: "0.6rem" }}>
+                  <span
+                    style={{ color: "rgba(255,255,255,0.3)", width: "16px" }}
+                  >
+                    {k}
+                  </span>
+                  <span>{v}</span>
+                </div>
               ))}
             </div>
           </div>
-
           {/* COL 2 */}
           <div>
-            <h4
+            <p
               style={{
-                fontSize: "0.72rem",
+                fontSize: "0.62rem",
                 fontWeight: 600,
-                letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.85)",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
+                color: "rgba(255,255,255,0.3)",
                 marginBottom: "1.25rem",
               }}
             >
               Navigasi
-            </h4>
-            <ul
-              style={{
-                listStyle: "none",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
+            </p>
+            <ul style={{ listStyle: "none" }}>
               {navLinks.map((item, i, arr) => (
                 <li
                   key={item}
                   style={{
-                    padding: "0.55rem 0",
+                    padding: "0.52rem 0",
                     borderBottom:
                       i < arr.length - 1
-                        ? "1px solid rgba(255,255,255,0.1)"
+                        ? "1px solid rgba(255,255,255,0.06)"
                         : "none",
                   }}
                 >
                   <a
                     href="#"
                     style={{
-                      fontSize: "0.82rem",
-                      color: "rgba(255,255,255,0.85)",
+                      fontSize: "0.8rem",
+                      color: "rgba(255,255,255,0.6)",
                       textDecoration: "none",
                       display: "flex",
                       alignItems: "center",
-                      gap: "0.5rem",
-                      transition: "color 0.2s, padding-left 0.2s",
+                      justifyContent: "space-between",
+                      transition: "color 0.2s",
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#fff";
-                      e.currentTarget.style.paddingLeft = "0.4rem";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.85)";
-                      e.currentTarget.style.paddingLeft = "0";
-                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = "rgba(255,255,255,0.6)")
+                    }
                   >
-                    <span style={{ fontSize: "0.4rem", opacity: 0.4 }}>●</span>
                     {item}
+                    <span style={{ fontSize: "0.6rem", opacity: 0.3 }}>→</span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-
           {/* COL 3 */}
           <div>
-            <h4
+            <p
               style={{
-                fontSize: "0.72rem",
+                fontSize: "0.62rem",
                 fontWeight: 600,
-                letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.85)",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
+                color: "rgba(255,255,255,0.3)",
                 marginBottom: "1.25rem",
               }}
             >
               Berita Terkini
-            </h4>
-            <div
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                borderRadius: "1.25rem",
-                border: "1px solid rgba(255,255,255,0.08)",
-                overflow: "hidden",
-              }}
-            >
+            </p>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               {berita.map((item, i, arr) => (
                 <div
                   key={i}
                   style={{
-                    padding: "1rem 1.25rem",
+                    padding: "1rem 0",
                     borderBottom:
                       i < arr.length - 1
-                        ? "1px solid rgba(255,255,255,0.07)"
+                        ? "1px solid rgba(255,255,255,0.06)"
                         : "none",
-                    display: "flex",
-                    gap: "0.9rem",
-                    alignItems: "flex-start",
                     cursor: "pointer",
-                    transition: "background 0.2s",
+                    transition: "opacity 0.2s",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background =
-                      "rgba(255,255,255,0.06)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = "transparent")
-                  }
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
                   <div
                     style={{
-                      width: "38px",
-                      height: "38px",
-                      flexShrink: 0,
-                      borderRadius: "10px",
-                      background: "rgba(208,41,42,0.18)",
-                      border: "1px solid rgba(208,41,42,0.3)",
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      gap: "0.5rem",
+                      marginBottom: "0.4rem",
                     }}
                   >
-                    <div
+                    <span
                       style={{
-                        width: "14px",
-                        height: "14px",
-                        borderRadius: "3px",
-                        background: "var(--red)",
-                        opacity: 0.9,
-                      }}
-                    />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "0.5rem",
-                        alignItems: "center",
-                        marginBottom: "0.3rem",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "0.62rem",
-                          fontWeight: 600,
-                          color: "var(--red)",
-                          letterSpacing: "0.06em",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {item.tag}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: "0.62rem",
-                          color: "rgba(255,255,255,0.3)",
-                        }}
-                      >
-                        {item.date}
-                      </span>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: "0.8rem",
+                        fontSize: "0.58rem",
                         fontWeight: 600,
-                        color: "#fff",
-                        lineHeight: 1.35,
-                        marginBottom: "0.25rem",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
+                        color: "var(--blue-lt)",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
                       }}
                     >
-                      {item.title}
-                    </p>
-                    <p
+                      {item.tag}
+                    </span>
+                    <span
                       style={{
-                        fontSize: "0.72rem",
-                        color: "rgba(255,255,255,0.4)",
-                        lineHeight: 1.55,
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
+                        fontSize: "0.58rem",
+                        color: "rgba(255,255,255,0.25)",
                       }}
                     >
-                      {item.desc}
-                    </p>
+                      {item.date}
+                    </span>
                   </div>
+                  <p
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                      color: "rgba(255,255,255,0.85)",
+                      lineHeight: 1.4,
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    {item.title}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "rgba(255,255,255,0.38)",
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    {item.desc}
+                  </p>
                 </div>
               ))}
-              <div
-                style={{
-                  padding: "0.75rem 1.25rem",
-                  borderTop: "1px solid rgba(255,255,255,0.07)",
-                }}
-              >
-                <a
-                  href="#"
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    color: "var(--red)",
-                    textDecoration: "none",
-                    letterSpacing: "0.04em",
-                    transition: "opacity 0.2s",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.opacity = "0.75")}
-                  onMouseLeave={(e) => (e.target.style.opacity = "1")}
-                >
-                  Lihat semua berita →
-                </a>
-              </div>
             </div>
+            <a
+              href="#"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                marginTop: "1rem",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                color: "var(--blue-lt)",
+                textDecoration: "none",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
+              onMouseLeave={(e) => (e.target.style.opacity = "1")}
+            >
+              Semua Berita →
+            </a>
           </div>
         </div>
 
-        <hr className="footer-divider" />
-        <div className="footer-bottom">
-          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
-            © 2025 PT Surya Tripta Rekayasa. All Rights Reserved.
+        <hr className="pd-footer-divider" />
+        <div className="pd-footer-bottom">
+          <p
+            style={{
+              fontSize: "0.72rem",
+              color: "rgba(255,255,255,0.22)",
+              letterSpacing: "0.04em",
+            }}
+          >
+            © {new Date().getFullYear()} PT Surya Tripta Rekayasa. All Rights
+            Reserved.
           </p>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
+          <div style={{ display: "flex", gap: "2rem" }}>
             {["Kebijakan Privasi", "Syarat & Ketentuan"].map((item) => (
               <a
                 key={item}
                 href="#"
                 style={{
-                  fontSize: "0.75rem",
-                  color: "rgba(255,255,255,0.3)",
+                  fontSize: "0.72rem",
+                  color: "rgba(255,255,255,0.22)",
                   textDecoration: "none",
                   transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => (e.target.style.color = "#fff")}
+                onMouseEnter={(e) =>
+                  (e.target.style.color = "rgba(255,255,255,0.65)")
+                }
                 onMouseLeave={(e) =>
-                  (e.target.style.color = "rgba(255,255,255,0.3)")
+                  (e.target.style.color = "rgba(255,255,255,0.22)")
                 }
               >
                 {item}
@@ -788,7 +1101,7 @@ function Footer() {
 }
 
 /* ─────────────────────────────────────────────
-   STATUS BADGE
+   STATUS BADGE — App.jsx style
 ───────────────────────────────────────────── */
 function StatusBadge({ status }) {
   const isActive = status === "Proyek Berlangsung";
@@ -798,24 +1111,27 @@ function StatusBadge({ status }) {
         display: "inline-flex",
         alignItems: "center",
         gap: "0.4rem",
-        background: isActive ? "rgba(17,86,168,0.12)" : "rgba(16,153,96,0.12)",
-        color: isActive ? "var(--blue)" : "#109960",
-        border: `1px solid ${isActive ? "rgba(17,86,168,0.25)" : "rgba(16,153,96,0.25)"}`,
-        borderRadius: "999px",
-        padding: "0.3rem 0.9rem",
-        fontSize: "0.72rem",
+        padding: "0.28rem 0.85rem",
+        borderRadius: "3px",
+        background: isActive ? "rgba(17,86,168,0.75)" : "rgba(16,153,96,0.65)",
+        backdropFilter: "blur(8px)",
+        border: "1px solid rgba(255,255,255,0.18)",
+        fontSize: "0.62rem",
         fontWeight: 600,
-        letterSpacing: "0.04em",
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        color: "#fff",
       }}
     >
       <span
         style={{
-          width: "6px",
-          height: "6px",
+          width: "5px",
+          height: "5px",
           borderRadius: "50%",
-          background: isActive ? "var(--blue)" : "#109960",
-          animation: isActive ? "pulse 1.8s ease-in-out infinite" : "none",
+          background: isActive ? "#60C8FF" : "#4AE8A0",
           display: "inline-block",
+          flexShrink: 0,
+          animation: isActive ? "pd-pulse 1.8s ease-in-out infinite" : "none",
         }}
       />
       {status}
@@ -824,7 +1140,7 @@ function StatusBadge({ status }) {
 }
 
 /* ─────────────────────────────────────────────
-   HERO SLIDER  ✅ breadcrumb dengan link /proyek
+   HERO SLIDER — mengadopsi visual language App.jsx
 ───────────────────────────────────────────── */
 function HeroSlider({ project }) {
   const navigate = useNavigate();
@@ -842,7 +1158,6 @@ function HeroSlider({ project }) {
     setAnimKey((k) => k + 1);
   };
 
-  // ✅ Breadcrumb: Beranda › Proyek › Nama Proyek
   const breadcrumbs = [
     { label: "Beranda", action: () => navigate("/") },
     { label: "Proyek", action: () => navigate("/proyek") },
@@ -850,132 +1165,185 @@ function HeroSlider({ project }) {
   ];
 
   return (
-    <div style={{ background: "var(--blue)", position: "relative" }}>
+    <div style={{ position: "relative" }}>
+      {/* ── Header band — mengadopsi pola HeroHeader di Proyeklist ── */}
       <div
         style={{
           background:
-            "linear-gradient(160deg, var(--blue-dk) 0%, var(--blue) 100%)",
-          padding: "7rem clamp(1.25rem,5vw,3rem) 3rem",
+            "linear-gradient(135deg, rgba(10,62,124,0.97) 0%, rgba(8,12,18,0.96) 100%)",
+          padding: "calc(68px + 3.5rem) clamp(1.25rem,5vw,3rem) 3rem",
           position: "relative",
           overflow: "hidden",
         }}
       >
+        {/* Blue stripe kiri */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "3px",
+            height: "100%",
+            background:
+              "linear-gradient(to bottom, var(--blue-lt), transparent)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Decorative circles */}
         {[
-          { top: "-80px", right: "-80px", size: "340px", opacity: "0.08" },
-          { top: "20px", right: "60px", size: "180px", opacity: "0.06" },
+          { t: "-80px", r: "-80px", s: "340px", o: "0.05" },
+          { t: "20px", r: "60px", s: "180px", o: "0.04" },
+          { t: "60%", r: "-60px", s: "240px", o: "0.03" },
         ].map((c, i) => (
           <div
             key={i}
             style={{
               position: "absolute",
-              top: c.top,
-              right: c.right,
-              width: c.size,
-              height: c.size,
+              top: c.t,
+              right: c.r,
+              width: c.s,
+              height: c.s,
               borderRadius: "50%",
-              border: `1px solid rgba(255,255,255,${c.opacity})`,
+              border: `1px solid rgba(255,255,255,${c.o})`,
               pointerEvents: "none",
             }}
           />
         ))}
 
-        {/* ✅ Breadcrumb dengan 3 level */}
+        {/* Corner bracket */}
         <div
-          className="anim-fade-in"
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            fontSize: "0.75rem",
-            color: "rgba(255,255,255,0.55)",
-            marginBottom: "1.25rem",
-            flexWrap: "wrap",
+            position: "absolute",
+            bottom: "1.5rem",
+            right: "2rem",
+            width: "36px",
+            height: "36px",
+            borderBottom: "2px solid rgba(255,255,255,0.1)",
+            borderRight: "2px solid rgba(255,255,255,0.1)",
+            pointerEvents: "none",
           }}
-        >
-          {breadcrumbs.map((crumb, i) => (
-            <span
-              key={i}
-              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-            >
-              <span
-                onClick={crumb.action || undefined}
-                style={{
-                  color:
-                    i < breadcrumbs.length - 1
-                      ? "rgba(255,255,255,0.55)"
-                      : "rgba(255,255,255,0.9)",
-                  cursor: crumb.action ? "pointer" : "default",
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  if (crumb.action) e.target.style.color = "#fff";
-                }}
-                onMouseLeave={(e) => {
-                  if (crumb.action)
-                    e.target.style.color = "rgba(255,255,255,0.55)";
-                }}
-              >
-                {crumb.label}
-              </span>
-              {i < breadcrumbs.length - 1 && (
-                <span style={{ opacity: 0.4 }}>›</span>
-              )}
-            </span>
-          ))}
-        </div>
+        />
 
-        {/* Title + badge */}
-        <div
-          className="hero-title-row"
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "1rem",
-          }}
-        >
-          <div>
-            <p
-              className="anim-slide-up d1"
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          {/* Breadcrumb */}
+          <div
+            className="anim-fade-in"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "0.72rem",
+              color: "rgba(255,255,255,0.4)",
+              marginBottom: "1.25rem",
+              letterSpacing: "0.06em",
+              flexWrap: "wrap",
+            }}
+          >
+            {breadcrumbs.map((crumb, i) => (
+              <span
+                key={i}
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                <span
+                  onClick={crumb.action || undefined}
+                  style={{
+                    color:
+                      i < breadcrumbs.length - 1
+                        ? "rgba(255,255,255,0.45)"
+                        : "rgba(255,255,255,0.85)",
+                    cursor: crumb.action ? "pointer" : "default",
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (crumb.action) e.target.style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (crumb.action)
+                      e.target.style.color = "rgba(255,255,255,0.45)";
+                  }}
+                >
+                  {crumb.label}
+                </span>
+                {i < breadcrumbs.length - 1 && (
+                  <span style={{ opacity: 0.3 }}>›</span>
+                )}
+              </span>
+            ))}
+          </div>
+
+          {/* Section label — App.jsx pattern */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              marginBottom: "0.75rem",
+            }}
+          >
+            <span
               style={{
-                color: "rgba(255,255,255,0.55)",
-                fontSize: "0.72rem",
-                fontWeight: 500,
-                letterSpacing: "0.1em",
-                marginBottom: "0.6rem",
+                display: "inline-block",
+                width: "24px",
+                height: "1.5px",
+                background: "var(--blue-lt)",
+              }}
+            />
+            <p
+              style={{
+                fontSize: "0.62rem",
+                fontWeight: 600,
+                letterSpacing: "0.18em",
                 textTransform: "uppercase",
+                color: "var(--blue-lt)",
               }}
             >
               {project.category}
             </p>
+          </div>
+
+          {/* Title row */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
             <h1
-              className="anim-slide-up d2"
+              className="anim-slide-up d1"
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 color: "#fff",
-                fontSize: "clamp(1.8rem,4.5vw,3.2rem)",
+                fontSize: "clamp(1.8rem,4.5vw,3.5rem)",
                 fontWeight: 700,
-                lineHeight: 1.1,
+                lineHeight: 1.05,
                 maxWidth: "680px",
+                fontStyle: "italic",
+                letterSpacing: "-0.01em",
               }}
             >
               {project.title}
             </h1>
-          </div>
-          <div className="anim-slide-up d2" style={{ paddingTop: "0.5rem" }}>
-            <StatusBadge status={project.status} />
+            <div
+              className="anim-slide-up d2"
+              style={{ paddingTop: "0.35rem", flexShrink: 0 }}
+            >
+              <StatusBadge status={project.status} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Image slider */}
+      {/* ── Image slider ── */}
       <div
         style={{
           position: "relative",
           height: "clamp(240px,42vw,520px)",
           overflow: "hidden",
-          background: "#000",
+          background: "var(--black)",
         }}
       >
         <img
@@ -994,59 +1362,83 @@ function HeroSlider({ project }) {
             e.target.style.display = "none";
           }}
         />
+
+        {/* Multi-layer gradient — App.jsx style */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%)",
+              "linear-gradient(to top, rgba(8,12,18,0.5) 0%, transparent 55%)",
             pointerEvents: "none",
           }}
         />
 
-        {images.length > 1 &&
-          [
-            { dir: -1, side: "left" },
-            { dir: 1, side: "right" },
-          ].map(({ dir, side }) => (
-            <button
-              key={side}
-              onClick={() => go(dir)}
-              style={{
-                position: "absolute",
-                [side]: "clamp(0.75rem,2vw,1.5rem)",
-                top: "50%",
-                transform: "translateY(-50%)",
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                background: "rgba(255,255,255,0.2)",
-                backdropFilter: "blur(8px)",
-                border: "1px solid rgba(255,255,255,0.3)",
-                color: "#fff",
-                fontSize: "1.2rem",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "background 0.25s",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = "rgba(255,255,255,0.38)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background = "rgba(255,255,255,0.2)")
-              }
-            >
-              {dir === -1 ? "‹" : "›"}
-            </button>
-          ))}
+        {/* Blue stripe accent — App.jsx style */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "3px",
+            height: "40%",
+            background: "var(--blue-lt)",
+            pointerEvents: "none",
+          }}
+        />
 
+        {/* Slide controls — App.jsx button style */}
         {images.length > 1 && (
           <div
             style={{
               position: "absolute",
               bottom: "1.25rem",
+              right: "1.25rem",
+              display: "flex",
+              gap: "0.4rem",
+            }}
+          >
+            {[
+              { dir: -1, label: "‹" },
+              { dir: 1, label: "›" },
+            ].map(({ dir, label }) => (
+              <button
+                key={dir}
+                onClick={() => go(dir)}
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "3px",
+                  border: "1px solid rgba(255,255,255,0.4)",
+                  background: "rgba(8,12,18,0.5)",
+                  backdropFilter: "blur(8px)",
+                  color: "#fff",
+                  fontSize: "1.1rem",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.background = "var(--blue)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.background = "rgba(8,12,18,0.5)")
+                }
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Dot indicators */}
+        {images.length > 1 && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "1.35rem",
               left: "50%",
               transform: "translateX(-50%)",
               display: "flex",
@@ -1064,7 +1456,7 @@ function HeroSlider({ project }) {
                   width: i === idx ? "24px" : "8px",
                   height: "8px",
                   borderRadius: "999px",
-                  background: i === idx ? "#fff" : "rgba(255,255,255,0.4)",
+                  background: i === idx ? "#fff" : "rgba(255,255,255,0.35)",
                   border: "none",
                   cursor: "pointer",
                   padding: 0,
@@ -1074,118 +1466,225 @@ function HeroSlider({ project }) {
             ))}
           </div>
         )}
+
+        {/* Image counter — App.jsx style */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "1.25rem",
+            left: "1.25rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            padding: "0.28rem 0.85rem",
+            borderRadius: "3px",
+            background: "rgba(8,12,18,0.55)",
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            fontSize: "0.62rem",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.75)",
+            letterSpacing: "0.1em",
+          }}
+        >
+          {idx + 1} — {images.length}
+        </div>
       </div>
     </div>
   );
 }
 
 /* ─────────────────────────────────────────────
-   DETAIL CONTENT
+   DETAIL CONTENT — mengadopsi design language App.jsx
 ───────────────────────────────────────────── */
 function DetailContent({ project }) {
   return (
     <section
       style={{
         background: "var(--white)",
-        padding: "clamp(2rem,5vw,4rem) clamp(1.25rem,5vw,3rem)",
+        padding: "clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem)",
       }}
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-        <p
-          className="anim-slide-up"
-          style={{
-            fontSize: "clamp(0.875rem,1.8vw,1rem)",
-            color: "var(--gray-4)",
-            lineHeight: 1.8,
-            maxWidth: "720px",
-            marginBottom: "3rem",
-            fontStyle: "italic",
-          }}
-        >
-          {project.shortDesc}
-        </p>
-
-        <div className="anim-slide-up d1">
-          <h2
+        {/* Section label */}
+        <div style={{ marginBottom: "2rem" }}>
+          <span
             style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(1.6rem,3vw,2.2rem)",
-              fontWeight: 700,
-              marginBottom: "1.5rem",
-              color: "var(--black)",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              fontSize: "0.65rem",
+              fontWeight: 600,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--blue)",
             }}
           >
-            Data Proyek
-          </h2>
-
-          <div
-            style={{
-              borderRadius: "1rem",
-              overflow: "hidden",
-              border: "1px solid var(--gray-1)",
-              boxShadow: "0 2px 20px rgba(0,0,0,0.05)",
-            }}
-          >
-            <div
+            <span
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1.5fr",
+                display: "inline-block",
+                width: "24px",
+                height: "1.5px",
                 background: "var(--blue)",
-                padding: "0.9rem 1.5rem",
+              }}
+            />
+            Deskripsi Proyek
+          </span>
+        </div>
+
+        {/* Short desc + data grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "clamp(2rem,5vw,5rem)",
+            alignItems: "start",
+          }}
+          className="pd-content-grid"
+        >
+          {/* Left: description */}
+          <div className="anim-slide-up">
+            <h2
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(1.6rem,3vw,2.4rem)",
+                fontWeight: 700,
+                marginBottom: "1.25rem",
+                color: "var(--black)",
+                lineHeight: 1.1,
+                letterSpacing: "-0.01em",
               }}
             >
-              {["URAIAN", "KETERANGAN"].map((h) => (
-                <span
-                  key={h}
-                  style={{
-                    color: "#fff",
-                    fontSize: "0.72rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.1em",
-                  }}
-                >
-                  {h}
-                </span>
-              ))}
-            </div>
+              Tentang Proyek
+            </h2>
+            <p
+              style={{
+                fontSize: "clamp(0.85rem,1.6vw,0.95rem)",
+                color: "var(--gray-4)",
+                lineHeight: 1.85,
+                marginBottom: "2rem",
+                fontWeight: 300,
+              }}
+            >
+              {project.shortDesc}
+            </p>
 
-            {project.data.map((row, i) => (
+            {/* Tag chips — App.jsx style */}
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+              {[
+                project.data.find((d) => d.label === "Lokasi")?.value,
+                project.data.find((d) => d.label === "Jenis Proyek")?.value,
+                project.status,
+              ]
+                .filter(Boolean)
+                .map((tag) => (
+                  <span
+                    key={tag}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      padding: "0.22rem 0.75rem",
+                      borderRadius: "999px",
+                      fontSize: "0.62rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      border: "1px solid rgba(17,86,168,0.25)",
+                      background: "rgba(17,86,168,0.07)",
+                      color: "var(--blue)",
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+            </div>
+          </div>
+
+          {/* Right: data table */}
+          <div className="anim-slide-up d1">
+            <h3
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(1.2rem,2vw,1.6rem)",
+                fontWeight: 700,
+                marginBottom: "1.25rem",
+                color: "var(--black)",
+              }}
+            >
+              Data Proyek
+            </h3>
+
+            <div
+              style={{
+                borderRadius: "8px",
+                overflow: "hidden",
+                border: "1px solid var(--gray-1)",
+                boxShadow: "0 2px 20px rgba(8,12,18,0.06)",
+              }}
+            >
+              {/* Table header */}
               <div
-                key={i}
-                className="data-row"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1.5fr",
-                  padding: "0.9rem 1.5rem",
-                  borderBottom:
-                    i < project.data.length - 1
-                      ? "1px solid var(--gray-1)"
-                      : "none",
-                  transition: "background 0.2s",
-                  background:
-                    i % 2 === 0 ? "var(--white)" : "rgba(244,244,242,0.6)",
+                  background: "var(--blue-dk)",
+                  padding: "0.85rem 1.25rem",
                 }}
               >
-                <span
-                  style={{
-                    fontSize: "0.82rem",
-                    color: "var(--gray-4)",
-                    fontWeight: 400,
-                  }}
-                >
-                  {row.label}
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.82rem",
-                    color: "var(--black)",
-                    fontWeight: 500,
-                  }}
-                >
-                  {row.value}
-                </span>
+                {["URAIAN", "KETERANGAN"].map((h) => (
+                  <span
+                    key={h}
+                    style={{
+                      color: "#fff",
+                      fontSize: "0.65rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.12em",
+                    }}
+                  >
+                    {h}
+                  </span>
+                ))}
               </div>
-            ))}
+
+              {project.data.map((row, i) => (
+                <div
+                  key={i}
+                  className="pd-data-row"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1.5fr",
+                    padding: "0.85rem 1.25rem",
+                    borderBottom:
+                      i < project.data.length - 1
+                        ? "1px solid var(--gray-1)"
+                        : "none",
+                    transition: "background 0.2s",
+                    background:
+                      i % 2 === 0 ? "var(--white)" : "rgba(245,245,243,0.7)",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.78rem",
+                      color: "var(--gray-3)",
+                      fontWeight: 500,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {row.label}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.82rem",
+                      color: "var(--black)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {row.value}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -1194,7 +1693,7 @@ function DetailContent({ project }) {
 }
 
 /* ─────────────────────────────────────────────
-   RELATED PROJECTS
+   RELATED PROJECTS — mengadopsi card style App.jsx
 ───────────────────────────────────────────── */
 function RelatedProjects({ currentSlug }) {
   const navigate = useNavigate();
@@ -1205,199 +1704,253 @@ function RelatedProjects({ currentSlug }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const statusColor = (status) =>
-    status === "Proyek Selesai" ? "#4AE8A0" : "#60C8FF";
-
   return (
     <section
       style={{
         background:
-          "linear-gradient(160deg, var(--blue-dk) 0%, var(--blue) 100%)",
+          "linear-gradient(135deg, rgba(10,62,124,0.97) 0%, rgba(8,12,18,0.96) 100%)",
         padding: "clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem)",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Blue stripe kiri */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "3px",
+          height: "100%",
+          background: "linear-gradient(to bottom, var(--blue-lt), transparent)",
+          pointerEvents: "none",
+        }}
+      />
+
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1.5rem",
-            marginBottom: "2.5rem",
-          }}
-        >
-          <div
+        {/* Section header — App.jsx pattern */}
+        <div style={{ marginBottom: "2.5rem" }}>
+          <span
             style={{
-              flex: 1,
-              height: "1px",
-              background: "rgba(255,255,255,0.2)",
-            }}
-          />
-          <h2
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              color: "#fff",
-              fontSize: "clamp(1.4rem,3vw,2rem)",
-              fontWeight: 700,
-              whiteSpace: "nowrap",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              fontSize: "0.65rem",
+              fontWeight: 600,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--blue-lt)",
+              marginBottom: "0.6rem",
             }}
           >
-            Proyek Lainnya
-          </h2>
+            <span
+              style={{
+                display: "inline-block",
+                width: "24px",
+                height: "1.5px",
+                background: "var(--blue-lt)",
+              }}
+            />
+            Portofolio
+          </span>
           <div
             style={{
-              flex: 1,
-              height: "1px",
-              background: "rgba(255,255,255,0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "1rem",
             }}
-          />
+          >
+            <h2
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                color: "#fff",
+                fontSize: "clamp(1.8rem,3.5vw,3rem)",
+                fontWeight: 700,
+                lineHeight: 1.1,
+                fontStyle: "italic",
+              }}
+            >
+              Proyek Lainnya
+            </h2>
+            <span
+              onClick={() => navigate("/proyek")}
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 600,
+                color: "rgba(255,255,255,0.55)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "rgba(255,255,255,0.55)")
+              }
+            >
+              Lihat Semua <span>→</span>
+            </span>
+          </div>
         </div>
 
+        {/* Cards grid — mengadopsi pl-card style dari Proyeklist */}
         <div
-          className="related-grid"
+          className="pd-related-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1.5rem",
+            gap: "1.25rem",
           }}
         >
           {related.map((project) => (
             <div
               key={project.id}
-              className="rel-card"
+              className="pd-rel-card"
               onClick={() => handleSelect(project.slug)}
               style={{
-                borderRadius: "1.25rem",
+                borderRadius: "8px",
                 overflow: "hidden",
                 cursor: "pointer",
                 position: "relative",
+                aspectRatio: "4/3",
                 boxShadow: "0 8px 28px rgba(0,0,0,0.18)",
+                background: "var(--black)",
               }}
             >
+              <img
+                src={project.images[0]}
+                alt={project.title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  opacity: 0.85,
+                  transition: "transform 0.6s cubic-bezier(.22,.68,0,1.1)",
+                }}
+                className="pd-rel-img"
+                onError={(e) => {
+                  e.target.style.background = "var(--blue-dk)";
+                  e.target.style.display = "block";
+                }}
+              />
+
+              {/* Multi-layer gradient */}
               <div
                 style={{
-                  position: "relative",
-                  height: "clamp(160px,22vw,240px)",
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to top, rgba(8,12,18,0.88) 0%, rgba(8,12,18,0.2) 55%, transparent 100%)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Blue stripe */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "3px",
+                  height: "35%",
+                  background: "var(--blue-lt)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Status badge */}
+              <div style={{ position: "absolute", top: "1rem", left: "1rem" }}>
+                <StatusBadge status={project.status} />
+              </div>
+
+              {/* Corner bracket */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  width: "32px",
+                  height: "32px",
+                  borderTop: "2px solid rgba(255,255,255,0.15)",
+                  borderLeft: "2px solid rgba(255,255,255,0.15)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Content */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "1.1rem 1rem 1.1rem",
                 }}
               >
-                <img
-                  src={project.images[0]}
-                  alt={project.title}
+                <p
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                    transition: "transform 0.6s ease",
-                  }}
-                  onError={(e) => {
-                    e.target.style.background = "var(--blue-dk)";
-                    e.target.style.display = "block";
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* Status badge */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "0.9rem",
-                    left: "0.9rem",
-                    background: "rgba(255,255,255,0.18)",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(255,255,255,0.3)",
-                    borderRadius: "999px",
-                    padding: "0.25rem 0.8rem",
-                    fontSize: "0.65rem",
+                    fontSize: "0.58rem",
+                    color: "rgba(255,255,255,0.45)",
                     fontWeight: 600,
-                    color: "#fff",
-                    letterSpacing: "0.04em",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.35rem",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    marginBottom: "0.35rem",
                   }}
                 >
-                  <span
-                    style={{
-                      width: "5px",
-                      height: "5px",
-                      borderRadius: "50%",
-                      background: statusColor(project.status),
-                      display: "inline-block",
-                    }}
-                  />
-                  {project.status}
-                </div>
-
-                <div
+                  {project.category}
+                </p>
+                <h3
                   style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    padding: "1rem 1.1rem 1.1rem",
+                    fontFamily: "'Cormorant Garamond', serif",
+                    color: "#fff",
+                    fontSize: "clamp(1rem,2vw,1.2rem)",
+                    fontWeight: 700,
+                    lineHeight: 1.2,
                   }}
                 >
-                  <h3
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      color: "#fff",
-                      fontSize: "clamp(1rem,2vw,1.25rem)",
-                      fontWeight: 700,
-                      lineHeight: 1.2,
-                      marginBottom: "0.35rem",
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: "0.65rem",
-                      color: "rgba(255,255,255,0.65)",
-                      fontWeight: 500,
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {project.category}
-                  </p>
-                </div>
+                  {project.title}
+                </h3>
               </div>
             </div>
           ))}
         </div>
 
-        {/* ✅ Tombol lihat semua proyek */}
+        {/* CTA button — App.jsx btn-primary style */}
         <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
           <button
             onClick={() => navigate("/proyek")}
             style={{
-              background: "rgba(255,255,255,0.12)",
-              border: "1px solid rgba(255,255,255,0.3)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              background: "var(--blue)",
               color: "#fff",
-              borderRadius: "999px",
+              border: "none",
+              borderRadius: "4px",
               padding: "0.7rem 2rem",
-              fontSize: "0.82rem",
-              fontWeight: 500,
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
               cursor: "pointer",
-              letterSpacing: "0.05em",
-              transition: "background 0.25s",
+              transition: "background 0.25s, transform 0.18s",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "rgba(255,255,255,0.22)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "rgba(255,255,255,0.12)")
-            }
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--blue-dk)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--blue)";
+              e.currentTarget.style.transform = "none";
+            }}
           >
-            Lihat Semua Proyek →
+            Lihat Semua Proyek <span style={{ fontSize: "0.9rem" }}>↗</span>
           </button>
         </div>
       </div>
@@ -1406,12 +1959,11 @@ function RelatedProjects({ currentSlug }) {
 }
 
 /* ─────────────────────────────────────────────
-   ROOT — useParams()
+   ROOT
 ───────────────────────────────────────────── */
 export default function ProjectDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-
   const project = allProjects.find((p) => p.slug === slug);
 
   useEffect(() => {
@@ -1422,7 +1974,79 @@ export default function ProjectDetail() {
 
   return (
     <>
-      <GlobalStyle />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+          --blue:    #1156A8;
+          --blue-dk: #0A3E7C;
+          --blue-lt: #1A6EC8;
+          --blue-xs: #E8F0FA;
+          --red:     #C8251F;
+          --black:   #080C12;
+          --gray-0:  #F5F5F3;
+          --gray-1:  #EAEAE7;
+          --gray-2:  #D4D4D0;
+          --gray-3:  #9A9A96;
+          --gray-4:  #5C5C58;
+          --white:   #FFFFFF;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+          background: var(--gray-0);
+          font-family: 'DM Sans', sans-serif;
+          color: var(--black);
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(1.05); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pd-pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50%       { opacity: 0.4; transform: scale(0.65); }
+        }
+        .anim-slide-up  { animation: slideUp  0.7s cubic-bezier(.22,.68,0,1.2) both; }
+        .anim-fade-in   { animation: fadeIn   0.55s ease both; }
+        .anim-scale-in  { animation: scaleIn  0.75s cubic-bezier(.22,.68,0,1.1) both; }
+        .d1 { animation-delay: 0.06s; }
+        .d2 { animation-delay: 0.14s; }
+        .d3 { animation-delay: 0.24s; }
+
+        /* Hover row */
+        .pd-data-row:hover { background: rgba(17,86,168,0.05) !important; }
+
+        /* Related card hover */
+        .pd-rel-card {
+          transition: transform 0.38s cubic-bezier(.22,.68,0,1.2), box-shadow 0.35s;
+        }
+        .pd-rel-card:hover { transform: translateY(-6px); box-shadow: 0 20px 52px rgba(8,12,18,0.28) !important; }
+        .pd-rel-card:hover .pd-rel-img { transform: scale(1.06); }
+
+        /* Responsive */
+        .pd-content-grid { grid-template-columns: 1fr 1fr; }
+        .pd-related-grid { grid-template-columns: repeat(3, 1fr); }
+
+        @media (max-width: 900px) {
+          .pd-content-grid { grid-template-columns: 1fr !important; }
+          .pd-related-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 600px) {
+          .pd-related-grid { grid-template-columns: 1fr !important; }
+          .pd-nav-items { display: none !important; }
+          .pd-hide-mobile { display: none !important; }
+        }
+      `}</style>
+
       <Navbar />
       <main style={{ paddingTop: "0" }}>
         <HeroSlider project={project} />

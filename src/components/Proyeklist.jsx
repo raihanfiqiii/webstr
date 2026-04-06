@@ -2,123 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 /* ─────────────────────────────────────────────
-   GLOBAL STYLES
-───────────────────────────────────────────── */
-const GlobalStyle = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --red:     #D0292A;
-      --blue:    #1156A8;
-      --blue-dk: #0A3E7C;
-      --blue-lt: #1A6EC8;
-      --black:   #0E0E0E;
-      --gray-0:  #F4F4F2;
-      --gray-1:  #E8E8E5;
-      --gray-2:  #D2D2CE;
-      --gray-3:  #9A9A96;
-      --gray-4:  #5A5A56;
-      --white:   #FFFFFF;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--gray-0);
-      font-family: 'DM Sans', sans-serif;
-      color: var(--black);
-      -webkit-font-smoothing: antialiased;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.45; transform: scale(0.7); }
-    }
-    .pl-anim-up   { animation: slideUp 0.55s cubic-bezier(.22,.68,0,1.2) both; }
-    .pl-anim-fade { animation: fadeIn  0.4s ease both; }
-
-    /* Filter select */
-    .filter-select {
-      appearance: none;
-      background: var(--white);
-      border: 1.5px solid var(--gray-2);
-      border-radius: 10px;
-      padding: 0.6rem 2.5rem 0.6rem 1rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      color: var(--black);
-      cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A9A96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-    }
-    .filter-select:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(17,86,168,0.12);
-    }
-    .filter-select:hover { border-color: var(--gray-3); }
-
-    /* Project card */
-    .pl-card {
-      cursor: pointer;
-      border-radius: 1.25rem;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      transition: transform 0.38s cubic-bezier(.22,.68,0,1.2), box-shadow 0.35s;
-      background: #111;
-    }
-    .pl-card:hover {
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 16px 44px rgba(0,0,0,0.2);
-    }
-    .pl-card:hover .pl-card-img { transform: scale(1.06); }
-    .pl-card-img {
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      transition: transform 0.65s cubic-bezier(.22,.68,0,1.1);
-      opacity: 0.88;
-    }
-
-    /* Empty state */
-    .pl-empty {
-      grid-column: 1 / -1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 5rem 2rem;
-      color: var(--gray-3); text-align: center;
-    }
-
-    /* Responsive grid */
-    .pl-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.1rem;
-    }
-    @media (max-width: 1100px) { .pl-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 767px) {
-      .pl-grid { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
-      .filter-row { flex-direction: column !important; }
-      .filter-item { width: 100% !important; max-width: 100% !important; }
-      .pl-nav-desktop { display: none !important; }
-      .pl-hero-title { font-size: clamp(2rem,8vw,3rem) !important; }
-      .filter-actions { margin-left: 0 !important; width: 100%; justify-content: space-between; }
-    }
-    @media (max-width: 480px) { .pl-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; } }
-  `}</style>
-);
-
-/* ─────────────────────────────────────────────
-   ALL PROJECTS DATA — 10 proyek
+   ALL PROJECTS DATA
 ───────────────────────────────────────────── */
 export const allProjects = [
   {
@@ -354,116 +238,509 @@ export const allProjects = [
 ];
 
 /* ─────────────────────────────────────────────
-   NAVBAR
+   NAVBAR — identik dengan App.jsx
 ───────────────────────────────────────────── */
+// function Navbar() {
+//   const [scrolled, setScrolled] = useState(false);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fn = () => setScrolled(window.scrollY > 24);
+//     window.addEventListener("scroll", fn, { passive: true });
+//     return () => window.removeEventListener("scroll", fn);
+//   }, []);
+
+//   return (
+//     <header
+//       style={{
+//         position: "fixed",
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         zIndex: 200,
+//         height: "68px",
+//         display: "flex",
+//         alignItems: "center",
+//         padding: "0 clamp(1.25rem,4vw,2.5rem)",
+//         justifyContent: "space-between",
+//         background: scrolled ? "rgba(8,12,18,0.92)" : "rgba(10,62,124,0.95)",
+//         backdropFilter: "blur(20px)",
+//         borderBottom: scrolled
+//           ? "1px solid rgba(255,255,255,0.08)"
+//           : "1px solid rgba(255,255,255,0.12)",
+//         transition: "background 0.45s, border-bottom 0.45s",
+//       }}
+//     >
+//       <div
+//         onClick={() => navigate("/")}
+//         style={{
+//           display: "flex",
+//           alignItems: "baseline",
+//           gap: "0.6rem",
+//           cursor: "pointer",
+//         }}
+//       >
+//         <span
+//           style={{
+//             fontFamily: "'Cormorant Garamond', serif",
+//             fontSize: "1.5rem",
+//             fontWeight: 700,
+//             letterSpacing: "0.05em",
+//             color: "#fff",
+//             lineHeight: 1,
+//           }}
+//         >
+//           PT STR
+//         </span>
+//         <span
+//           style={{
+//             fontSize: "0.58rem",
+//             fontWeight: 500,
+//             letterSpacing: "0.14em",
+//             textTransform: "uppercase",
+//             color: "rgba(255,255,255,0.45)",
+//             paddingBottom: "2px",
+//           }}
+//           className="pl-hide-mobile"
+//         >
+//           Surya Tripta Rekayasa
+//         </span>
+//       </div>
+
+//       <nav
+//         className="pl-nav-items"
+//         style={{
+//           display: "flex",
+//           gap: "clamp(1.25rem,2.5vw,2.25rem)",
+//           alignItems: "center",
+//         }}
+//       >
+//         {[
+//           { label: "Beranda", path: "/" },
+//           { label: "Profile", path: "/profile" },
+//           { label: "Proyek", path: "/proyek" },
+//           { label: "Tentang", path: null },
+//         ].map(({ label, path }) => (
+//           <span
+//             key={label}
+//             onClick={() => path && navigate(path)}
+//             style={{
+//               fontSize: "0.75rem",
+//               fontWeight: 500,
+//               letterSpacing: "0.07em",
+//               textTransform: "uppercase",
+//               color: label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)",
+//               cursor: path ? "pointer" : "default",
+//               transition: "color 0.2s",
+//               borderBottom:
+//                 label === "Proyek"
+//                   ? "1.5px solid rgba(255,255,255,0.5)"
+//                   : "none",
+//               paddingBottom: "2px",
+//             }}
+//             onMouseEnter={(e) => {
+//               if (path) e.currentTarget.style.color = "#fff";
+//             }}
+//             onMouseLeave={(e) => {
+//               e.currentTarget.style.color =
+//                 label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)";
+//             }}
+//           >
+//             {label}
+//           </span>
+//         ))}
+//         <button
+//           style={{
+//             background: "var(--red)",
+//             color: "#fff",
+//             border: "none",
+//             borderRadius: "3px",
+//             padding: "0.48rem 1.25rem",
+//             fontSize: "0.72rem",
+//             fontWeight: 600,
+//             letterSpacing: "0.08em",
+//             textTransform: "uppercase",
+//             cursor: "pointer",
+//             transition: "background 0.22s, transform 0.18s",
+//           }}
+//           onMouseEnter={(e) => {
+//             e.currentTarget.style.background = "#a01c17";
+//             e.currentTarget.style.transform = "translateY(-1px)";
+//           }}
+//           onMouseLeave={(e) => {
+//             e.currentTarget.style.background = "var(--red)";
+//             e.currentTarget.style.transform = "none";
+//           }}
+//         >
+//           Hubungi Kami
+//         </button>
+//       </nav>
+//     </header>
+//   );
+// }
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", fn);
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        padding: "0 clamp(1.25rem,4vw,2.5rem)",
-        height: "68px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: "rgba(10,62,124,0.95)",
-        //background: scrolled ? "rgba(10,62,124,0.95)" : "rgba(10,62,124,0.75)",
-        backdropFilter: "blur(16px)",
-        borderBottom: "1px solid rgba(255,255,255,0.12)",
-        transition: "background 0.4s",
-      }}
-    >
-      <span
-        onClick={() => navigate("/")}
-        style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "1.35rem",
-          fontWeight: 700,
-          letterSpacing: "0.04em",
-          color: "#fff",
-          cursor: "pointer",
-        }}
-      >
-        PT STR
-      </span>
+  // Tutup menu saat scroll
+  useEffect(() => {
+    if (!menuOpen) return;
+    const fn = () => setMenuOpen(false);
+    window.addEventListener("scroll", fn, { passive: true, once: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, [menuOpen]);
 
-      <nav
-        className="pl-nav-desktop"
+  const navItems = [
+    { label: "Beranda", path: "/" },
+    { label: "Profile", path: "/profile" },
+    { label: "Proyek", path: "/proyek" },
+  ];
+
+  const handleNav = (path) => {
+    navigate(path);
+    setMenuOpen(false);
+  };
+
+  return (
+    <>
+      <header
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 200,
+          height: "68px",
           display: "flex",
-          gap: "clamp(1rem,2.5vw,2rem)",
           alignItems: "center",
+          padding: "0 clamp(1.25rem,4vw,2.5rem)",
+          justifyContent: "space-between",
+          background: scrolled ? "rgba(8,12,18,0.92)" : "rgba(10,62,124,0.95)",
+          backdropFilter: "blur(20px)",
+          borderBottom: scrolled
+            ? "1px solid rgba(255,255,255,0.08)"
+            : "1px solid rgba(255,255,255,0.12)",
+          transition: "background 0.45s, border-bottom 0.45s",
         }}
       >
-        {["Beranda", "Profile", "Proyek", "Tentang"].map((l) => (
-          <span
-            key={l}
-            onClick={() => {
-              if (l === "Beranda") navigate("/");
-              if (l === "Profile") navigate("/profile");
-              if (l === "Proyek") navigate("/proyek");
-            }}
-            style={{
-              fontSize: "0.78rem",
-              fontWeight: 500,
-              color: l === "Proyek" ? "#fff" : "rgba(255,255,255,0.7)",
-              letterSpacing: "0.06em",
-              cursor: "pointer",
-              transition: "color 0.2s",
-              textDecoration: l === "Proyek" ? "underline" : "none",
-              textUnderlineOffset: "3px",
-            }}
-            onMouseEnter={(e) => (e.target.style.color = "var(--black)")}
-            onMouseLeave={(e) =>
-              (e.target.style.color =
-                l === "Proyek" ? "#fff" : "rgba(255,255,255,0.7)")
-            }
-          >
-            {l}
-          </span>
-        ))}
-        <button
+        {/* Logo */}
+        <div
+          onClick={() => handleNav("/")}
           style={{
-            background: "rgba(255,255,255,0.15)",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.3)",
-            borderRadius: "999px",
-            padding: "0.45rem 1.2rem",
-            fontSize: "0.75rem",
-            fontWeight: 500,
+            display: "flex",
+            alignItems: "baseline",
+            gap: "0.6rem",
             cursor: "pointer",
-            letterSpacing: "0.04em",
-            transition: "background 0.25s",
           }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "rgba(255,255,255,0.25)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "rgba(255,255,255,0.15)")
-          }
         >
-          Hubungi Kami
+          <span
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "1.5rem",
+              fontWeight: 700,
+              letterSpacing: "0.05em",
+              color: "#fff",
+              lineHeight: 1,
+            }}
+          >
+            PT STR
+          </span>
+          <span
+            style={{
+              fontSize: "0.58rem",
+              fontWeight: 500,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.45)",
+              paddingBottom: "2px",
+            }}
+            className="hide-mobile"
+          >
+            Surya Tripta Rekayasa
+          </span>
+        </div>
+
+        {/* Nav items — desktop */}
+        <nav
+          className="nav-items"
+          style={{
+            display: "flex",
+            gap: "clamp(1.25rem,2.5vw,2.25rem)",
+            alignItems: "center",
+          }}
+        >
+          {navItems.map(({ label, path }) => (
+            <span
+              key={label}
+              onClick={() => handleNav(path)}
+              style={{
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                letterSpacing: "0.07em",
+                textTransform: "uppercase",
+                color: label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)",
+                cursor: "pointer",
+                transition: "color 0.2s",
+                paddingBottom: "2px",
+                borderBottom:
+                  label === "Proyek"
+                    ? "1.5px solid rgba(255,255,255,0.5)"
+                    : "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#fff";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color =
+                  label === "Proyek" ? "#fff" : "rgba(255,255,255,0.62)";
+              }}
+            >
+              {label}
+            </span>
+          ))}
+          <button
+            style={{
+              background: "var(--red)",
+              color: "#fff",
+              border: "none",
+              borderRadius: "3px",
+              padding: "0.48rem 1.25rem",
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "background 0.22s, transform 0.18s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#a01c17";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--red)";
+              e.currentTarget.style.transform = "none";
+            }}
+          >
+            Hubungi Kami
+          </button>
+        </nav>
+
+        {/* Hamburger button — mobile only */}
+        <button
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label="Toggle menu"
+          style={{
+            display: "none",
+            flexDirection: "column",
+            gap: "5px",
+            cursor: "pointer",
+            background: "none",
+            border: "none",
+            padding: "8px",
+            borderRadius: "4px",
+            transition: "background 0.2s",
+          }}
+          className="hamburger-btn"
+        >
+          <span
+            style={{
+              display: "block",
+              width: "22px",
+              height: "1.5px",
+              background: "#fff",
+              borderRadius: "2px",
+              transition: "all 0.38s cubic-bezier(.22,.68,0,1.2)",
+              transformOrigin: "center",
+              transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
+            }}
+          />
+          <span
+            style={{
+              display: "block",
+              width: "22px",
+              height: "1.5px",
+              background: "#fff",
+              borderRadius: "2px",
+              transition: "all 0.38s cubic-bezier(.22,.68,0,1.2)",
+              opacity: menuOpen ? 0 : 1,
+              transform: menuOpen ? "scaleX(0)" : "scaleX(1)",
+            }}
+          />
+          <span
+            style={{
+              display: "block",
+              width: "22px",
+              height: "1.5px",
+              background: "#fff",
+              borderRadius: "2px",
+              transition: "all 0.38s cubic-bezier(.22,.68,0,1.2)",
+              transformOrigin: "center",
+              transform: menuOpen
+                ? "translateY(-6.5px) rotate(-45deg)"
+                : "none",
+            }}
+          />
         </button>
-      </nav>
-    </header>
+      </header>
+
+      {/* Mobile menu overlay */}
+      <div
+        style={{
+          position: "fixed",
+          top: "68px",
+          left: 0,
+          right: 0,
+          zIndex: 199,
+          background: "rgba(8,12,18,0.97)",
+          backdropFilter: "blur(24px)",
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          transformOrigin: "top",
+          transform: menuOpen ? "scaleY(1)" : "scaleY(0)",
+          opacity: menuOpen ? 1 : 0,
+          transition:
+            "transform 0.42s cubic-bezier(.22,.68,0,1.15), opacity 0.32s ease",
+          pointerEvents: menuOpen ? "auto" : "none",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ padding: "1.5rem 2rem 2rem" }}>
+          {navItems.map(({ label, path }, i) => (
+            <div
+              key={label}
+              onClick={() => handleNav(path)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "1.1rem 0",
+                borderBottom:
+                  i < navItems.length - 1
+                    ? "1px solid rgba(255,255,255,0.06)"
+                    : "none",
+                cursor: "pointer",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.7";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.9rem" }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.55rem",
+                    color: "rgba(255,255,255,0.22)",
+                    letterSpacing: "0.1em",
+                    fontWeight: 500,
+                    width: "18px",
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "1rem",
+                    fontWeight: 500,
+                    color: "rgba(255,255,255,0.88)",
+                    letterSpacing: "0.04em",
+                    transition: "color 0.2s",
+                  }}
+                >
+                  {label}
+                </span>
+              </div>
+              <span
+                style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.2)" }}
+              >
+                →
+              </span>
+            </div>
+          ))}
+
+          {/* Footer dalam menu */}
+          <div
+            style={{
+              marginTop: "1.75rem",
+              paddingTop: "1.5rem",
+              borderTop: "1px solid rgba(255,255,255,0.07)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "1rem",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontStyle: "italic",
+                  fontSize: "0.78rem",
+                  color: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                PT Surya Tripta Rekayasa
+              </p>
+              <p
+                style={{
+                  fontSize: "0.58rem",
+                  color: "rgba(255,255,255,0.15)",
+                  marginTop: "0.2rem",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Surabaya, Jawa Timur
+              </p>
+            </div>
+            <button
+              style={{
+                background: "var(--red)",
+                color: "#fff",
+                border: "none",
+                borderRadius: "4px",
+                padding: "0.72rem 1.75rem",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                transition: "background 0.22s",
+                flex: 1,
+                maxWidth: "200px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#a01c17";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "var(--red)";
+              }}
+            >
+              Hubungi Kami
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
 /* ─────────────────────────────────────────────
-   FOOTER SECTION
+   FOOTER — identik dengan App.jsx
 ───────────────────────────────────────────── */
 function Footer() {
   const navLinks = [
@@ -497,13 +774,7 @@ function Footer() {
   ];
 
   return (
-    <footer
-      style={{
-        background: /*"rgba(10, 62, 124, 0.95)"*/ "var(--black)",
-        color: "#fff",
-        padding: "0",
-      }}
-    >
+    <footer style={{ background: "var(--black)", color: "#fff", padding: "0" }}>
       <div
         style={{
           background: "var(--gray-0)",
@@ -515,345 +786,338 @@ function Footer() {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "3rem 2rem 2rem",
+          padding: "4rem 2rem 2.5rem",
         }}
       >
         <style>{`
-          .footer-grid {
-            display: grid; grid-template-columns: 1fr; gap: 2.5rem;
-          }
-          @media (min-width: 768px) {
-            .footer-grid { grid-template-columns: 1.2fr 1fr 1.1fr; gap: 3rem; }
-          }
-          .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 2.5rem 0 1.5rem; }
-          .footer-bottom { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
-          @media (min-width: 768px) {
-            .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
-          }
+          .pl-footer-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+          @media (min-width: 768px) { .pl-footer-grid { grid-template-columns: 1.4fr 1fr 1.2fr; gap: 3.5rem; } }
+          .pl-footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 2.5rem 0 1.75rem; }
+          .pl-footer-bottom { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+          @media (min-width: 768px) { .pl-footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
         `}</style>
 
-        <div className="footer-grid">
+        {/* Brand strip */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "3rem",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            marginBottom: "3rem",
+            flexWrap: "wrap",
+            gap: "1.5rem",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "2rem",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                color: "#fff",
+                display: "block",
+              }}
+            >
+              PT STR
+            </span>
+            <p
+              style={{
+                fontSize: "0.65rem",
+                color: "rgba(255,255,255,0.35)",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Surya Tripta Rekayasa
+            </p>
+          </div>
+          <p
+            style={{
+              fontSize: "0.82rem",
+              color: "rgba(255,255,255,0.45)",
+              maxWidth: "380px",
+              lineHeight: 1.75,
+              fontStyle: "italic",
+            }}
+          >
+            "Membangun Indonesia dengan kualitas, presisi, dan integritas yang
+            tidak pernah berkompromi."
+          </p>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            {socials.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "3px",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  color: "rgba(255,255,255,0.5)",
+                  textDecoration: "none",
+                  textTransform: "uppercase",
+                  transition: "border-color 0.2s, color 0.2s, background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--blue-lt)";
+                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.background = "var(--blue)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="pl-footer-grid">
           {/* COL 1 */}
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
           >
             <div>
-              <span
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "1.6rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                  color: "#fff",
-                }}
-              >
-                PT STR
-              </span>
               <p
                 style={{
-                  fontSize: "0.7rem",
-                  color: "rgba(255,255,255,0.7)",
-                  marginTop: "0.15rem",
-                  letterSpacing: "0.08em",
+                  fontSize: "0.62rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.3)",
+                  marginBottom: "0.75rem",
                 }}
               >
-                PT Surya Tripta Rekayasa
+                Kantor Pusat
+              </p>
+              <p
+                style={{
+                  fontSize: "0.8rem",
+                  color: "rgba(255,255,255,0.65)",
+                  lineHeight: 1.85,
+                }}
+              >
+                Kawasan Industri Surabaya
+                <br />
+                Jl. Rungkut Industri Raya No. 10
+                <br />
+                Surabaya, Jawa Timur 60293
               </p>
             </div>
-            <p
-              style={{
-                fontSize: "0.8rem",
-                color: "rgba(255,255,255,0.85)",
-                lineHeight: 1.75,
-                maxWidth: "300px",
-              }}
-            >
-              Kawasan Industri Surabaya, Jl. Rungkut Industri Raya No. 10,
-              Surabaya, Jawa Timur 60293, Indonesia.
-            </p>
             <div
               style={{
-                fontSize: "0.8rem",
-                color: "rgba(255,255,255,0.85)",
-                lineHeight: 2,
+                fontSize: "0.78rem",
+                color: "rgba(255,255,255,0.55)",
+                lineHeight: 2.2,
               }}
             >
-              <div>Phone: (031) 123 4567</div>
-              <div>Fax: (031) 765 4321</div>
-              <div>Email: info@ptsurya.co.id</div>
-            </div>
-            <div style={{ display: "flex", gap: "0.6rem" }}>
-              {socials.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    border: "1.5px solid rgba(255,255,255,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "0.68rem",
-                    fontWeight: 600,
-                    color: "rgba(255,255,255,0.6)",
-                    textDecoration: "none",
-                    textTransform: "uppercase",
-                    transition:
-                      "border-color 0.2s, color 0.2s, background 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "var(--red)";
-                    e.currentTarget.style.color = "#fff";
-                    e.currentTarget.style.background = "var(--red)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-                    e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  {label}
-                </a>
+              {[
+                ["T", "(031) 123 4567"],
+                ["F", "(031) 765 4321"],
+                ["E", "info@ptsurya.co.id"],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display: "flex", gap: "0.6rem" }}>
+                  <span
+                    style={{ color: "rgba(255,255,255,0.3)", width: "16px" }}
+                  >
+                    {k}
+                  </span>
+                  <span>{v}</span>
+                </div>
               ))}
             </div>
           </div>
-
           {/* COL 2 */}
           <div>
-            <h4
+            <p
               style={{
-                fontSize: "0.72rem",
+                fontSize: "0.62rem",
                 fontWeight: 600,
-                letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.85)",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
+                color: "rgba(255,255,255,0.3)",
                 marginBottom: "1.25rem",
               }}
             >
               Navigasi
-            </h4>
-            <ul
-              style={{
-                listStyle: "none",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
+            </p>
+            <ul style={{ listStyle: "none" }}>
               {navLinks.map((item, i, arr) => (
                 <li
                   key={item}
                   style={{
-                    padding: "0.55rem 0",
+                    padding: "0.52rem 0",
                     borderBottom:
                       i < arr.length - 1
-                        ? "1px solid rgba(255,255,255,0.1)"
+                        ? "1px solid rgba(255,255,255,0.06)"
                         : "none",
                   }}
                 >
                   <a
                     href="#"
                     style={{
-                      fontSize: "0.82rem",
-                      color: "rgba(255,255,255,0.85)",
+                      fontSize: "0.8rem",
+                      color: "rgba(255,255,255,0.6)",
                       textDecoration: "none",
                       display: "flex",
                       alignItems: "center",
-                      gap: "0.5rem",
-                      transition: "color 0.2s, padding-left 0.2s",
+                      justifyContent: "space-between",
+                      transition: "color 0.2s",
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#fff";
-                      e.currentTarget.style.paddingLeft = "0.4rem";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.85)";
-                      e.currentTarget.style.paddingLeft = "0";
-                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = "rgba(255,255,255,0.6)")
+                    }
                   >
-                    <span style={{ fontSize: "0.4rem", opacity: 0.4 }}>●</span>
                     {item}
+                    <span style={{ fontSize: "0.6rem", opacity: 0.3 }}>→</span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-
           {/* COL 3 */}
           <div>
-            <h4
+            <p
               style={{
-                fontSize: "0.72rem",
+                fontSize: "0.62rem",
                 fontWeight: 600,
-                letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.85)",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
+                color: "rgba(255,255,255,0.3)",
                 marginBottom: "1.25rem",
               }}
             >
               Berita Terkini
-            </h4>
-            <div
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                borderRadius: "1.25rem",
-                border: "1px solid rgba(255,255,255,0.08)",
-                overflow: "hidden",
-              }}
-            >
+            </p>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               {berita.map((item, i, arr) => (
                 <div
                   key={i}
                   style={{
-                    padding: "1rem 1.25rem",
+                    padding: "1rem 0",
                     borderBottom:
                       i < arr.length - 1
-                        ? "1px solid rgba(255,255,255,0.07)"
+                        ? "1px solid rgba(255,255,255,0.06)"
                         : "none",
-                    display: "flex",
-                    gap: "0.9rem",
-                    alignItems: "flex-start",
                     cursor: "pointer",
-                    transition: "background 0.2s",
+                    transition: "opacity 0.2s",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background =
-                      "rgba(255,255,255,0.06)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = "transparent")
-                  }
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
                   <div
                     style={{
-                      width: "38px",
-                      height: "38px",
-                      flexShrink: 0,
-                      borderRadius: "10px",
-                      background: "rgba(208,41,42,0.18)",
-                      border: "1px solid rgba(208,41,42,0.3)",
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      gap: "0.5rem",
+                      marginBottom: "0.4rem",
                     }}
                   >
-                    <div
+                    <span
                       style={{
-                        width: "14px",
-                        height: "14px",
-                        borderRadius: "3px",
-                        background: "var(--red)",
-                        opacity: 0.9,
-                      }}
-                    />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "0.5rem",
-                        alignItems: "center",
-                        marginBottom: "0.3rem",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "0.62rem",
-                          fontWeight: 600,
-                          color: "var(--red)",
-                          letterSpacing: "0.06em",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {item.tag}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: "0.62rem",
-                          color: "rgba(255,255,255,0.3)",
-                        }}
-                      >
-                        {item.date}
-                      </span>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: "0.8rem",
+                        fontSize: "0.58rem",
                         fontWeight: 600,
-                        color: "#fff",
-                        lineHeight: 1.35,
-                        marginBottom: "0.25rem",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
+                        color: "var(--blue-lt)",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
                       }}
                     >
-                      {item.title}
-                    </p>
-                    <p
+                      {item.tag}
+                    </span>
+                    <span
                       style={{
-                        fontSize: "0.72rem",
-                        color: "rgba(255,255,255,0.4)",
-                        lineHeight: 1.55,
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
+                        fontSize: "0.58rem",
+                        color: "rgba(255,255,255,0.25)",
                       }}
                     >
-                      {item.desc}
-                    </p>
+                      {item.date}
+                    </span>
                   </div>
+                  <p
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                      color: "rgba(255,255,255,0.85)",
+                      lineHeight: 1.4,
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    {item.title}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "rgba(255,255,255,0.38)",
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    {item.desc}
+                  </p>
                 </div>
               ))}
-              <div
-                style={{
-                  padding: "0.75rem 1.25rem",
-                  borderTop: "1px solid rgba(255,255,255,0.07)",
-                }}
-              >
-                <a
-                  href="#"
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    color: "var(--red)",
-                    textDecoration: "none",
-                    letterSpacing: "0.04em",
-                    transition: "opacity 0.2s",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.opacity = "0.75")}
-                  onMouseLeave={(e) => (e.target.style.opacity = "1")}
-                >
-                  Lihat semua berita →
-                </a>
-              </div>
             </div>
+            <a
+              href="#"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                marginTop: "1rem",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                color: "var(--blue-lt)",
+                textDecoration: "none",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
+              onMouseLeave={(e) => (e.target.style.opacity = "1")}
+            >
+              Semua Berita →
+            </a>
           </div>
         </div>
 
-        <hr className="footer-divider" />
-        <div className="footer-bottom">
-          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
-            © 2025 PT Surya Tripta Rekayasa. All Rights Reserved.
+        <hr className="pl-footer-divider" />
+        <div className="pl-footer-bottom">
+          <p
+            style={{
+              fontSize: "0.72rem",
+              color: "rgba(255,255,255,0.22)",
+              letterSpacing: "0.04em",
+            }}
+          >
+            © {new Date().getFullYear()} PT Surya Tripta Rekayasa. All Rights
+            Reserved.
           </p>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
+          <div style={{ display: "flex", gap: "2rem" }}>
             {["Kebijakan Privasi", "Syarat & Ketentuan"].map((item) => (
               <a
                 key={item}
                 href="#"
                 style={{
-                  fontSize: "0.75rem",
-                  color: "rgba(255,255,255,0.3)",
+                  fontSize: "0.72rem",
+                  color: "rgba(255,255,255,0.22)",
                   textDecoration: "none",
                   transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => (e.target.style.color = "#fff")}
+                onMouseEnter={(e) =>
+                  (e.target.style.color = "rgba(255,255,255,0.65)")
+                }
                 onMouseLeave={(e) =>
-                  (e.target.style.color = "rgba(255,255,255,0.3)")
+                  (e.target.style.color = "rgba(255,255,255,0.22)")
                 }
               >
                 {item}
@@ -867,7 +1131,7 @@ function Footer() {
 }
 
 /* ─────────────────────────────────────────────
-   STATUS BADGE
+   STATUS BADGE — menggunakan visual language App.jsx
 ───────────────────────────────────────────── */
 function StatusBadge({ status }) {
   const isActive = status === "Proyek Berlangsung";
@@ -876,16 +1140,17 @@ function StatusBadge({ status }) {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "0.35rem",
-        background: "rgba(255,255,255,0.18)",
-        backdropFilter: "blur(10px)",
-        border: "1px solid rgba(255,255,255,0.3)",
-        borderRadius: "999px",
-        padding: "0.22rem 0.75rem",
-        fontSize: "0.64rem",
+        gap: "0.4rem",
+        padding: "0.28rem 0.85rem",
+        borderRadius: "3px",
+        background: "rgba(17,86,168,0.75)",
+        backdropFilter: "blur(8px)",
+        border: "1px solid rgba(255,255,255,0.18)",
+        fontSize: "0.62rem",
         fontWeight: 600,
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
         color: "#fff",
-        letterSpacing: "0.03em",
       }}
     >
       <span
@@ -895,7 +1160,8 @@ function StatusBadge({ status }) {
           borderRadius: "50%",
           background: isActive ? "#60C8FF" : "#4AE8A0",
           display: "inline-block",
-          animation: isActive ? "pulse 1.8s ease-in-out infinite" : "none",
+          animation: isActive ? "pl-pulse 1.8s ease-in-out infinite" : "none",
+          flexShrink: 0,
         }}
       />
       {status}
@@ -904,14 +1170,19 @@ function StatusBadge({ status }) {
 }
 
 /* ─────────────────────────────────────────────
-   PROJECT CARD
+   PROJECT CARD — mengadopsi card style App.jsx
 ───────────────────────────────────────────── */
 function ProjectCard({ project, animDelay = 0 }) {
   const navigate = useNavigate();
+
   return (
     <div
-      className="pl-card pl-anim-up"
-      style={{ animationDelay: `${animDelay}s`, aspectRatio: "3 / 4" }}
+      className="pl-card anim-slide-up"
+      style={{
+        animationDelay: `${animDelay}s`,
+        aspectRatio: "3 / 4",
+        cursor: "pointer",
+      }}
       onClick={() => navigate(`/proyek/${project.slug}`)}
     >
       <img
@@ -924,27 +1195,67 @@ function ProjectCard({ project, animDelay = 0 }) {
           e.target.style.display = "block";
         }}
       />
+      {/* Multi-layer gradient — App.jsx style */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.18) 55%, transparent 100%)",
+            "linear-gradient(to top, rgba(8,12,18,0.88) 0%, rgba(8,12,18,0.2) 55%, transparent 100%)",
           pointerEvents: "none",
         }}
       />
-      <div style={{ position: "absolute", top: "0.85rem", left: "0.85rem" }}>
+      {/* Blue stripe accent — App.jsx style */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "3px",
+          height: "35%",
+          background: "var(--blue-lt)",
+          pointerEvents: "none",
+        }}
+      />
+      {/* Status badge — top left */}
+      <div style={{ position: "absolute", top: "1rem", left: "1rem" }}>
         <StatusBadge status={project.status} />
       </div>
+      {/* Corner accent — App.jsx style */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: "36px",
+          height: "36px",
+          borderTop: "2px solid rgba(255,255,255,0.15)",
+          borderLeft: "2px solid rgba(255,255,255,0.15)",
+          pointerEvents: "none",
+        }}
+      />
+      {/* Content bottom */}
       <div
         style={{
           position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          padding: "1rem 1rem 1.1rem",
+          padding: "1.25rem 1.1rem 1.25rem",
         }}
       >
+        <p
+          style={{
+            fontSize: "0.58rem",
+            color: "rgba(255,255,255,0.45)",
+            fontWeight: 600,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            marginBottom: "0.4rem",
+          }}
+        >
+          {project.category}
+        </p>
         <h3
           style={{
             fontFamily: "'Cormorant Garamond', serif",
@@ -952,29 +1263,33 @@ function ProjectCard({ project, animDelay = 0 }) {
             fontSize: "clamp(0.95rem,1.8vw,1.2rem)",
             fontWeight: 700,
             lineHeight: 1.2,
-            marginBottom: "0.4rem",
+            marginBottom: "0.5rem",
           }}
         >
           {project.title}
         </h3>
-        <p
+        {/* "Detail" button — App.jsx style */}
+        <span
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.35rem",
             fontSize: "0.6rem",
-            color: "rgba(255,255,255,0.6)",
-            fontWeight: 500,
-            letterSpacing: "0.08em",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.55)",
+            letterSpacing: "0.1em",
             textTransform: "uppercase",
           }}
         >
-          {project.category}
-        </p>
+          Lihat Detail <span style={{ opacity: 0.7 }}>→</span>
+        </span>
       </div>
     </div>
   );
 }
 
 /* ─────────────────────────────────────────────
-   FILTER BAR
+   FILTER BAR — menggunakan App.jsx design language
 ───────────────────────────────────────────── */
 function FilterBar({ filters, setFilters, total, filtered }) {
   const filterOptions = {
@@ -983,54 +1298,91 @@ function FilterBar({ filters, setFilters, total, filtered }) {
     status: ["Semua", "Proyek Berlangsung", "Proyek Selesai"],
   };
   const labels = {
-    kategori: "Kategori Proyek",
+    kategori: "Kategori",
     jenis: "Jenis Proyek",
-    status: "Status Proyek",
+    status: "Status",
   };
+  const hasFilter = filters.kategori || filters.jenis || filters.status;
 
   return (
     <div
       style={{
         background: "var(--white)",
         borderBottom: "1px solid var(--gray-1)",
-        padding: "1.25rem clamp(1.25rem,5vw,3rem)",
+        padding: "1.1rem clamp(1.25rem,5vw,3rem)",
         position: "sticky",
         top: "68px",
         zIndex: 90,
-        boxShadow: "0 2px 16px rgba(0,0,0,0.05)",
+        boxShadow: "0 2px 24px rgba(8,12,18,0.06)",
       }}
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         <div
-          className="filter-row"
+          className="pl-filter-row"
           style={{
             display: "flex",
-            gap: "1rem",
-            alignItems: "flex-end",
+            gap: "0.85rem",
+            alignItems: "center",
             flexWrap: "wrap",
           }}
         >
+          {/* Section label style prefix */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              flexShrink: 0,
+              paddingRight: "0.85rem",
+              borderRight: "1px solid var(--gray-2)",
+            }}
+            className="pl-filter-label-col"
+          >
+            <span
+              style={{
+                display: "inline-block",
+                width: "18px",
+                height: "1.5px",
+                background: "var(--blue)",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontSize: "0.62rem",
+                fontWeight: 600,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+                color: "var(--blue)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Filter
+            </span>
+          </div>
+
+          {/* Selects */}
           {Object.keys(filterOptions).map((key) => (
             <div
               key={key}
-              className="filter-item"
-              style={{ flex: "1", minWidth: "160px", maxWidth: "240px" }}
+              className="pl-filter-item"
+              style={{ flex: "1", minWidth: "140px", maxWidth: "220px" }}
             >
               <label
                 style={{
                   display: "block",
-                  fontSize: "0.7rem",
+                  fontSize: "0.58rem",
                   fontWeight: 600,
-                  color: "var(--gray-4)",
-                  letterSpacing: "0.06em",
-                  marginBottom: "0.4rem",
+                  color: "var(--gray-3)",
+                  letterSpacing: "0.1em",
+                  marginBottom: "0.3rem",
                   textTransform: "uppercase",
                 }}
               >
                 {labels[key]}
               </label>
               <select
-                className="filter-select"
+                className="pl-filter-select"
                 value={filters[key]}
                 onChange={(e) =>
                   setFilters((prev) => ({ ...prev, [key]: e.target.value }))
@@ -1045,11 +1397,11 @@ function FilterBar({ filters, setFilters, total, filtered }) {
             </div>
           ))}
 
+          {/* Right side: count + reset */}
           <div
-            className="filter-actions"
             style={{
               display: "flex",
-              alignItems: "flex-end",
+              alignItems: "center",
               gap: "1rem",
               marginLeft: "auto",
               flexShrink: 0,
@@ -1057,16 +1409,22 @@ function FilterBar({ filters, setFilters, total, filtered }) {
           >
             <span
               style={{
-                fontSize: "0.78rem",
+                fontSize: "0.75rem",
                 color: "var(--gray-3)",
                 whiteSpace: "nowrap",
-                paddingBottom: "0.45rem",
               }}
             >
-              <strong style={{ color: "var(--blue)" }}>{filtered}</strong> /{" "}
-              {total} proyek
+              <strong
+                style={{
+                  color: "var(--blue)",
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {filtered}
+              </strong>
+              <span style={{ opacity: 0.6 }}> / {total} proyek</span>
             </span>
-            {(filters.kategori || filters.jenis || filters.status) && (
+            {hasFilter && (
               <button
                 onClick={() =>
                   setFilters({ kategori: "", jenis: "", status: "" })
@@ -1074,14 +1432,19 @@ function FilterBar({ filters, setFilters, total, filtered }) {
                 style={{
                   background: "transparent",
                   border: "1.5px solid var(--gray-2)",
-                  borderRadius: "999px",
-                  padding: "0.5rem 1rem",
-                  fontSize: "0.75rem",
-                  fontWeight: 500,
+                  borderRadius: "3px",
+                  padding: "0.4rem 0.85rem",
+                  fontSize: "0.68rem",
+                  fontWeight: 600,
                   color: "var(--gray-4)",
                   cursor: "pointer",
-                  transition: "all 0.22s",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  transition: "border-color 0.2s, color 0.2s",
                   whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "var(--red)";
@@ -1092,7 +1455,7 @@ function FilterBar({ filters, setFilters, total, filtered }) {
                   e.currentTarget.style.color = "var(--gray-4)";
                 }}
               >
-                ✕ Reset Filter
+                <span>✕</span> Reset
               </button>
             )}
           </div>
@@ -1103,24 +1466,39 @@ function FilterBar({ filters, setFilters, total, filtered }) {
 }
 
 /* ─────────────────────────────────────────────
-   HERO HEADER
+   HERO HEADER — mengadopsi pattern Hero App.jsx
 ───────────────────────────────────────────── */
 function HeroHeader() {
   const navigate = useNavigate();
+
   return (
     <div
       style={{
         background:
-          "linear-gradient(160deg, rgba(10,62,124,0.97) 0%, rgba(14,14,14,0.95) 100%)",
-        padding: "7.5rem clamp(1.25rem, 5vw, 3rem) 3.5rem",
+          "linear-gradient(135deg, rgba(10,62,124,0.97) 0%, rgba(8,12,18,0.96) 100%)",
+        padding: "calc(68px + 4rem) clamp(1.25rem,5vw,3rem) 3.5rem",
         position: "relative",
         overflow: "hidden",
       }}
     >
+      {/* Blue stripe accent kiri — App.jsx style */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "3px",
+          height: "100%",
+          background: "linear-gradient(to bottom, var(--blue-lt), transparent)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Decorative circles */}
       {[
-        { t: "-100px", r: "-100px", s: "400px", o: "0.07" },
-        { t: "30px", r: "80px", s: "200px", o: "0.05" },
-        { t: "60%", r: "-60px", s: "260px", o: "0.04" },
+        { t: "-100px", r: "-100px", s: "400px", o: "0.05" },
+        { t: "30px", r: "80px", s: "200px", o: "0.04" },
+        { t: "60%", r: "-60px", s: "260px", o: "0.03" },
       ].map((c, i) => (
         <div
           key={i}
@@ -1137,17 +1515,32 @@ function HeroHeader() {
         />
       ))}
 
+      {/* Corner bracket accent */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "1.5rem",
+          right: "2rem",
+          width: "40px",
+          height: "40px",
+          borderBottom: "2px solid rgba(255,255,255,0.1)",
+          borderRight: "2px solid rgba(255,255,255,0.1)",
+          pointerEvents: "none",
+        }}
+      />
+
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         {/* Breadcrumb */}
         <div
-          className="pl-anim-fade"
+          className="anim-fade-in"
           style={{
             display: "flex",
             alignItems: "center",
             gap: "0.5rem",
-            fontSize: "0.75rem",
-            color: "rgba(255,255,255,0.5)",
+            fontSize: "0.72rem",
+            color: "rgba(255,255,255,0.4)",
             marginBottom: "1.5rem",
+            letterSpacing: "0.06em",
           }}
         >
           <span
@@ -1155,96 +1548,124 @@ function HeroHeader() {
             style={{ cursor: "pointer", transition: "color 0.2s" }}
             onMouseEnter={(e) => (e.target.style.color = "#fff")}
             onMouseLeave={(e) =>
-              (e.target.style.color = "rgba(255,255,255,0.5)")
+              (e.target.style.color = "rgba(255,255,255,0.4)")
             }
           >
             Beranda
           </span>
-          <span style={{ opacity: 0.4 }}>›</span>
-          <span style={{ color: "rgba(255,255,255,0.85)" }}>Proyek</span>
+          <span style={{ opacity: 0.35 }}>›</span>
+          <span style={{ color: "rgba(255,255,255,0.75)" }}>Proyek</span>
         </div>
 
-        <p
-          className="pl-anim-up"
+        {/* Section label — App.jsx pattern */}
+        <div
           style={{
-            color: "rgba(255,255,255,0.55)",
-            fontSize: "0.72rem",
-            fontWeight: 500,
-            letterSpacing: "0.12em",
-            marginBottom: "0.75rem",
-            textTransform: "uppercase",
-            animationDelay: "0.05s",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.6rem",
+            marginBottom: "0.8rem",
           }}
         >
-          PT Surya Tripta Rekayasa
-        </p>
+          <span
+            style={{
+              display: "inline-block",
+              width: "24px",
+              height: "1.5px",
+              background: "var(--blue-lt)",
+            }}
+          />
+          <p
+            style={{
+              fontSize: "0.65rem",
+              fontWeight: 600,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--blue-lt)",
+            }}
+          >
+            PT Surya Tripta Rekayasa
+          </p>
+        </div>
+
         <h1
-          className="pl-hero-title pl-anim-up"
+          className="anim-slide-up d1"
           style={{
             fontFamily: "'Cormorant Garamond', serif",
             color: "#fff",
             fontSize: "clamp(2.4rem,5vw,4rem)",
             fontWeight: 700,
-            lineHeight: 1.08,
+            lineHeight: 1.05,
             maxWidth: "640px",
-            animationDelay: "0.12s",
+            fontStyle: "italic",
+            letterSpacing: "-0.01em",
+            marginBottom: "0.85rem",
           }}
         >
           Portofolio Proyek Kami
         </h1>
+
         <p
-          className="pl-anim-up"
+          className="anim-slide-up d2"
           style={{
-            color: "rgba(255,255,255,0.6)",
-            fontSize: "clamp(0.82rem,1.5vw,0.95rem)",
-            lineHeight: 1.75,
+            color: "rgba(255,255,255,0.5)",
+            fontSize: "clamp(0.82rem,1.5vw,0.92rem)",
+            lineHeight: 1.8,
             maxWidth: "500px",
-            marginTop: "1rem",
-            animationDelay: "0.22s",
+            fontWeight: 300,
           }}
         >
           Kumpulan proyek konstruksi dan infrastruktur yang telah dan sedang
           kami kerjakan untuk Indonesia.
         </p>
 
+        {/* Stats bar mini — identik dengan App.jsx stats bar */}
         <div
-          className="pl-anim-up"
+          className="anim-slide-up d3"
           style={{
             display: "flex",
             gap: "clamp(1.5rem,4vw,3rem)",
             marginTop: "2.5rem",
+            paddingTop: "2rem",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
             flexWrap: "wrap",
-            animationDelay: "0.3s",
           }}
         >
           {[
             { num: "10+", label: "Total Proyek" },
             { num: "5", label: "Proyek Aktif" },
             { num: "Rp 15T+", label: "Nilai Proyek" },
-          ].map((s) => (
-            <div key={s.label}>
-              <p
+            { num: "4", label: "Provinsi" },
+          ].map((s, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.2rem",
+              }}
+            >
+              <span
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   color: "#fff",
-                  fontSize: "clamp(1.6rem,3vw,2.4rem)",
+                  fontSize: "clamp(1.6rem,3vw,2.2rem)",
                   fontWeight: 700,
                   lineHeight: 1,
                 }}
               >
                 {s.num}
-              </p>
-              <p
+              </span>
+              <span
                 style={{
-                  color: "rgba(255,255,255,0.5)",
-                  fontSize: "0.72rem",
-                  marginTop: "0.3rem",
-                  letterSpacing: "0.06em",
+                  color: "rgba(255,255,255,0.4)",
+                  fontSize: "0.62rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
                 }}
               >
                 {s.label}
-              </p>
+              </span>
             </div>
           ))}
         </div>
@@ -1254,7 +1675,7 @@ function HeroHeader() {
 }
 
 /* ─────────────────────────────────────────────
-   MAIN PAGE EXPORT
+   MAIN PAGE
 ───────────────────────────────────────────── */
 export default function ProyekList() {
   const [filters, setFilters] = useState({
@@ -1281,7 +1702,131 @@ export default function ProyekList() {
 
   return (
     <>
-      <GlobalStyle />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+          --blue:    #1156A8;
+          --blue-dk: #0A3E7C;
+          --blue-lt: #1A6EC8;
+          --blue-xs: #E8F0FA;
+          --red:     #C8251F;
+          --black:   #080C12;
+          --gray-0:  #F5F5F3;
+          --gray-1:  #EAEAE7;
+          --gray-2:  #D4D4D0;
+          --gray-3:  #9A9A96;
+          --gray-4:  #5C5C58;
+          --white:   #FFFFFF;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+          background: var(--gray-0);
+          font-family: 'DM Sans', sans-serif;
+          color: var(--black);
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(1.05); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes lineGrow {
+          from { transform: scaleX(0); }
+          to   { transform: scaleX(1); }
+        }
+        @keyframes pl-pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50%       { opacity: 0.4; transform: scale(0.65); }
+        }
+        .anim-slide-up  { animation: slideUp  0.7s cubic-bezier(.22,.68,0,1.2) both; }
+        .anim-fade-in   { animation: fadeIn   0.55s ease both; }
+        .anim-scale-in  { animation: scaleIn  0.75s cubic-bezier(.22,.68,0,1.1) both; }
+        .d1 { animation-delay: 0.06s; }
+        .d2 { animation-delay: 0.14s; }
+        .d3 { animation-delay: 0.24s; }
+        .d4 { animation-delay: 0.36s; }
+
+        /* Project card */
+        .pl-card {
+          border-radius: 8px;
+          overflow: hidden;
+          position: relative;
+          box-shadow: 0 4px 24px rgba(8,12,18,0.12);
+          transition: transform 0.38s cubic-bezier(.22,.68,0,1.2), box-shadow 0.35s;
+          background: var(--black);
+        }
+        .pl-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 52px rgba(8,12,18,0.2);
+        }
+        .pl-card:hover .pl-card-img { transform: scale(1.06); }
+        .pl-card-img {
+          width: 100%; height: 100%;
+          object-fit: cover; display: block;
+          transition: transform 0.65s cubic-bezier(.22,.68,0,1.1);
+          opacity: 0.88;
+        }
+
+        /* Filter select — App.jsx ghost button style */
+        .pl-filter-select {
+          appearance: none;
+          background: var(--white);
+          border: 1.5px solid var(--gray-2);
+          border-radius: 4px;
+          padding: 0.48rem 2.2rem 0.48rem 0.9rem;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.78rem;
+          color: var(--black);
+          cursor: pointer;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          width: 100%;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239A9A96' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.85rem center;
+        }
+        .pl-filter-select:focus {
+          outline: none;
+          border-color: var(--blue);
+          box-shadow: 0 0 0 3px rgba(17,86,168,0.1);
+        }
+        .pl-filter-select:hover { border-color: var(--gray-3); }
+
+        /* Responsive grid */
+        .pl-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.1rem;
+        }
+        @media (max-width: 1100px) { .pl-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 767px)  {
+          .pl-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+          .pl-filter-row { flex-direction: column !important; }
+          .pl-filter-item { width: 100% !important; max-width: 100% !important; }
+          .pl-nav-items { display: none !important; }
+          .pl-hide-mobile { display: none !important; }
+          .pl-filter-label-col { display: none !important; }
+        }
+        @media (max-width: 480px) { .pl-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; } }
+
+        /* Empty state */
+        .pl-empty {
+          grid-column: 1 / -1;
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          padding: 6rem 2rem;
+          color: var(--gray-3); text-align: center;
+        }
+      `}</style>
+
       <Navbar />
       <main>
         <HeroHeader />
@@ -1291,41 +1836,76 @@ export default function ProyekList() {
           total={allProjects.length}
           filtered={filtered.length}
         />
+
         <section
           style={{
-            padding: "2.5rem clamp(1.25rem,5vw,3rem) 5rem",
+            padding: "3rem clamp(1.25rem,5vw,3rem) 6rem",
             maxWidth: "1280px",
             margin: "0 auto",
           }}
         >
+          {/* Section label above grid */}
+          <div style={{ marginBottom: "2rem" }}>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.6rem",
+                fontSize: "0.65rem",
+                fontWeight: 600,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "var(--blue)",
+              }}
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  width: "24px",
+                  height: "1.5px",
+                  background: "var(--blue)",
+                }}
+              />
+              Portofolio
+            </span>
+          </div>
+
           {filtered.length === 0 ? (
             <div className="pl-empty">
               <div
                 style={{
                   width: "64px",
                   height: "64px",
-                  borderRadius: "50%",
+                  borderRadius: "8px",
                   background: "var(--gray-1)",
+                  border: "1px solid var(--gray-2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "1.8rem",
-                  marginBottom: "1.25rem",
+                  fontSize: "1.6rem",
+                  marginBottom: "1.5rem",
                 }}
               >
                 🔍
               </div>
               <p
                 style={{
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                  color: "var(--gray-4)",
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "1.4rem",
+                  fontWeight: 700,
+                  color: "var(--black)",
                   marginBottom: "0.5rem",
                 }}
               >
                 Tidak ada proyek ditemukan
               </p>
-              <p style={{ fontSize: "0.82rem", color: "var(--gray-3)" }}>
+              <p
+                style={{
+                  fontSize: "0.82rem",
+                  color: "var(--gray-3)",
+                  lineHeight: 1.7,
+                }}
+              >
                 Coba ubah atau reset filter di atas
               </p>
             </div>
